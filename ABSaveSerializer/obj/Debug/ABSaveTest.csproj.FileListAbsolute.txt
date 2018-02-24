@@ -1,0 +1,12 @@
+I:\Desktop\HistamcomVB\ABSaveSerializer\ABSaveSerializer\bin\Debug\ABSaveSerializer.exe.config
+I:\Desktop\HistamcomVB\ABSaveSerializer\ABSaveSerializer\bin\Debug\ABSaveSerializer.exe
+I:\Desktop\HistamcomVB\ABSaveSerializer\ABSaveSerializer\bin\Debug\ABSaveSerializer.pdb
+I:\Desktop\HistamcomVB\ABSaveSerializer\ABSaveSerializer\obj\Debug\ABSaveTest.csprojResolveAssemblyReference.cache
+I:\Desktop\HistamcomVB\ABSaveSerializer\ABSaveSerializer\obj\Debug\ABSaveSerializer.Properties.Resources.resources
+I:\Desktop\HistamcomVB\ABSaveSerializer\ABSaveSerializer\obj\Debug\ABSaveTest.csproj.GenerateResource.Cache
+I:\Desktop\HistamcomVB\ABSaveSerializer\ABSaveSerializer\obj\Debug\ABSaveTest.csproj.CoreCompileInputs.cache
+I:\Desktop\HistamcomVB\ABSaveSerializer\ABSaveSerializer\obj\Debug\ABSaveSerializer.exe
+I:\Desktop\HistamcomVB\ABSaveSerializer\ABSaveSerializer\obj\Debug\ABSaveSerializer.pdb
+I:\Desktop\HistamcomVB\ABSaveSerializer\ABSaveSerializer\bin\Debug\ABSoftware.ABSave.dll
+I:\Desktop\HistamcomVB\ABSaveSerializer\ABSaveSerializer\bin\Debug\ABSoftware.ABSave.pdb
+I:\Desktop\HistamcomVB\ABSaveSerializer\ABSaveSerializer\obj\Debug\ABSaveSerializer.Form1.resources
