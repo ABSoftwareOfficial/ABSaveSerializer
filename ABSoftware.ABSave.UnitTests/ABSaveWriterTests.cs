@@ -36,11 +36,11 @@ namespace ABSoftware.ABSave.UnitTests
         }
 
         [TestMethod]
-        public void WriteType_NoNeedToEscapeString_ReturnsCertainString()
+        public void Escape_NoNeedToEscapeString_ReturnsCertainString()
         {
             // Arrange
 
-            var str = "a";
+            var str = "ab as+_Ag[ag;g[sa]gas'#g;sg['asgas[]lfawa.";
 
             // Act
 
@@ -49,6 +49,38 @@ namespace ABSoftware.ABSave.UnitTests
             // Assert
 
             Assert.AreEqual(result, str);
+        }
+
+        [TestMethod]
+        public void Escape_OneReasonToEscapeString_ReturnsCertainString()
+        {
+            // Arrange
+
+            var str = "ab as+_Ag[ag;g\u0001[sa]gas'#g;sg['asgas[]lfawa.";
+
+            // Act
+
+            var result = ABSaveWriter.Escape(str);
+
+            // Assert
+
+            Assert.AreEqual(result, "ab as+_Ag[ag;g\\\u0001[sa]gas'#g;sg['asgas[]lfawa.");
+        }
+
+        [TestMethod]
+        public void Escape_ReasonsToEscapeString_ReturnsCertainString()
+        {
+            // Arrange
+
+            var str = "ab as+_Ag[ag;g\u0001[sa]g\u0004as\u0002'#g;sg['\u0003asga\u0005s[]lfa\u0006wa.";
+
+            // Act
+
+            var result = ABSaveWriter.Escape(str);
+
+            // Assert
+
+            Assert.AreEqual(result, "ab as+_Ag[ag;g\\\u0001[sa]g\\\u0004as\\\u0002'#g;sg['\\\u0003asga\\\u0005s[]lfa\\\u0006wa.");
         }
     }
 }

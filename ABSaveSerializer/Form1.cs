@@ -19,6 +19,16 @@ namespace ABSaveSerializer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            var testDict = new Dictionary<string, string>()
+            {
+                { "FirstKey", "FirstValue" },
+                { "SecondKey", "SecondValue" }
+            };
+
+            // Act
+
+            var result = ABSoftware.ABSave.ABSaveSerializer.SerializeDictionary(testDict);
+
             TestClass test = new TestClass();
             textBox1.Text = ABSoftware.ABSave.ABSaveConvert.SerializeABSave(test);
         }

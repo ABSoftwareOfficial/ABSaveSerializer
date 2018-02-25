@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -27,11 +28,32 @@ namespace ABSoftware.ABSave
         /// <returns>The ABSave string.</returns>
         public static string SerializeABSave(object obj)
         {
-            string ret = "";
+            StringBuilder ret = new StringBuilder();
 
+            // NOTE: (tl;dr)
+            // Why do we use a StringBuilder, and not just a string?
+            // Well, there's one word to explain that:
+            // Performance.
+            // The ONLY reason we are using a StringBuilder instead of a string is because it's much faster.
+            // HOWEVER, we don't want to just support StringBuilder - we want to allow users to use strings as well.
+            // And THAT'S why we have a string mode (just set UseSB to false on most methods) and a StringBuilder mode!
+            // StringBuilder is faster, but less flexible - I mean, you can do basically anything with a string, because it's a standard type.
+
+            SerializeABSaveToStringBuilder(obj, ret);
+
+            return ret.ToString();
+        }
+
+        /// <summary>
+        /// Turns a C# object into ABSave and places the result in a StringBuilder.
+        /// </summary>
+        /// <param name="obj">The object to "serialize".</param>
+        /// <returns>The ABSave string.</returns>
+        public static void SerializeABSaveToStringBuilder(object obj, StringBuilder sb = null)
+        {
             if (obj != null)
-            {       
-
+            {
+                Stopwatch testReflection = Stopwatch.StartNew();
                 // Normal reflection stuff (the lower three variables)
                 var bindingFlags = BindingFlags.Instance |
                        BindingFlags.NonPublic |
@@ -42,13 +64,25 @@ namespace ABSoftware.ABSave
                                      .Select(field => field.GetValue(obj))
                                      .ToList();
 
-                foreach (object val in fieldValues)
-                    ret += ABSaveSerializer.Serialize(val);
+                testReflection.Stop();
+                Console.WriteLine("TIME TAKEN FOR REFLECTION: " + testReflection.Elapsed);
+                bool notfirst = false;
 
-                ret = ret.Trim('\u0001').TrimEnd('\u0005');
+                Stopwatch testLoop = Stopwatch.StartNew();
+                for (int i = 0; i < fieldValues.Count; i++)
+                {
+                    ABSaveSerializer.Serialize(fieldValues[i], true, sb, notfirst, (i == fieldValues.Count - 1) ? true : false);
+                    if (!notfirst)
+                        notfirst = true;
+                }
+                testLoop.Stop();
+                Console.WriteLine("TIME TAKEN FOR LOOP: " + testReflection.Elapsed);
+
+                Stopwatch testTrim = Stopwatch.StartNew();
+                //ret = ret.TrimEnd('\u0005');
+                testTrim.Stop();
+                Console.WriteLine("TIME TAKEN FOR TRIM: " + testTrim.Elapsed);
             }
-
-            return ret;
         }
     }
 }

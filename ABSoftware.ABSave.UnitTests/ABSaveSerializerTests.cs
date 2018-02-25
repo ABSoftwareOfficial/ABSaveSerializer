@@ -20,7 +20,7 @@ namespace ABSoftware.ABSave.UnitTests
 
             // Assert
 
-            Assert.AreEqual(result, "\u0001T");
+            Assert.AreEqual("\u0001T", result);
         }
 
         [TestMethod]
@@ -36,7 +36,7 @@ namespace ABSoftware.ABSave.UnitTests
 
             // Assert
 
-            Assert.AreEqual(result, "\u0001Hello world!");
+            Assert.AreEqual("\u0001Hello world!", result);
         }
 
         [TestMethod]
@@ -52,7 +52,7 @@ namespace ABSoftware.ABSave.UnitTests
 
             // Assert
 
-            Assert.AreEqual(result, "\u00017");
+            Assert.AreEqual("\u00017", result);
         }
 
         [TestMethod]
@@ -68,7 +68,7 @@ namespace ABSoftware.ABSave.UnitTests
 
             // Assert
 
-            Assert.AreEqual(result, "\u00017");
+            Assert.AreEqual("\u00017", result);
         }
 
         [TestMethod]
@@ -84,7 +84,7 @@ namespace ABSoftware.ABSave.UnitTests
 
             // Assert
 
-            Assert.AreEqual(result, "\u00017.23");
+            Assert.AreEqual("\u00017.23", result);
         }
 
         [TestMethod]
@@ -96,7 +96,7 @@ namespace ABSoftware.ABSave.UnitTests
 
             // Assert
 
-            Assert.AreEqual(result, "T");
+            Assert.AreEqual("\u0001T", result);
         }
 
         [TestMethod]
@@ -108,7 +108,7 @@ namespace ABSoftware.ABSave.UnitTests
 
             // Assert
 
-            Assert.AreEqual(result, "F");
+            Assert.AreEqual("\u0001F", result);
         }
 
         [TestMethod]
@@ -120,11 +120,30 @@ namespace ABSoftware.ABSave.UnitTests
 
             // Act
 
-            var result = ABSaveSerializer.SerializeObject(test);
+            var result = ABSaveSerializer.SerializeObject(test, test.GetType());
 
             // Assert
 
-            Assert.AreEqual("\u0002" + typeof(TestClass).FullName + "\u0003Oh, Hello!\u0001365\u0002" + typeof(NextClass).FullName + "\u0003F\u0005\u0004\u0001FirstStr\u0001SecondStr\u0005", result);
+            System.IO.File.WriteAllText("expected.txt", ABSaveWriter.WriteType(typeof(TestClass)) + "\u0003Oh, Hello!\u0001365" + ABSaveWriter.WriteType(typeof(NextClass)) + "\u0003F\u0005\u0004FirstStr\u0001SecondStr\u0005");
+            System.IO.File.WriteAllText("result.txt", result);
+            Assert.AreEqual(ABSaveWriter.WriteType(typeof(TestClass)) + "\u0003Oh, Hello!\u0001365" + ABSaveWriter.WriteType(typeof(NextClass)) + "\u0003F\u0005\u0004FirstStr\u0001SecondStr\u0005", result);
+        }
+
+        [TestMethod]
+        public void SerializeArray_SingleItemArray_ReturnsString()
+        {
+            // Arrange
+
+            var test = new List<string>() { "cool1" };
+
+            // Act
+
+            var result = ABSaveSerializer.SerializeArray(test);
+
+            // Assert
+
+            System.IO.File.WriteAllText("SingleItemArrayResult.txt", result);
+            Assert.AreEqual("\u0004cool1\u0005", result);        
         }
 
         [TestMethod]
