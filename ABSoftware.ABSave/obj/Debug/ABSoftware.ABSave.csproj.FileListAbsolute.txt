@@ -4,3 +4,9 @@ I:\Desktop\HistamcomVB\ABSaveSerializer\ABSoftware.ABSave\obj\Debug\ABSoftware.A
 I:\Desktop\HistamcomVB\ABSaveSerializer\ABSoftware.ABSave\obj\Debug\ABSoftware.ABSave.dll
 I:\Desktop\HistamcomVB\ABSaveSerializer\ABSoftware.ABSave\obj\Debug\ABSoftware.ABSave.pdb
 I:\Desktop\HistamcomVB\ABSaveSerializer\ABSoftware.ABSave\obj\Debug\ABSoftware.ABSave.csprojResolveAssemblyReference.cache
+I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSoftware.ABSave\bin\Debug\ABSoftware.ABSave.dll
+I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSoftware.ABSave\bin\Debug\ABSoftware.ABSave.pdb
+I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSoftware.ABSave\obj\Debug\ABSoftware.ABSave.csproj.CoreCompileInputs.cache
+I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSoftware.ABSave\obj\Debug\ABSoftware.ABSave.dll
+I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSoftware.ABSave\obj\Debug\ABSoftware.ABSave.pdb
+I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSoftware.ABSave\obj\Debug\ABSoftware.ABSave.csprojAssemblyReference.cache

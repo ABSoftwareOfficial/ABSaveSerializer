@@ -29,7 +29,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>ABSoftware.ABSave.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ABParse, Version=1.0.1.0, Culture=neutral, PublicKeyToken=1738a6cf4068a940, processorArchitecture=MSIL">
+      <HintPath>..\packages\ABParse.1.0.2\lib\net461\ABParse.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,9 +50,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ABSaveConvert.cs" />
-    <Compile Include="ABSaveSerializer.cs" />
-    <Compile Include="ABSaveWriter.cs" />
+    <Compile Include="ABSavePrimitiveType.cs" />
+    <Compile Include="ABSaveType.cs" />
+    <Compile Include="Deserialization\ABSaveParser.cs" />
+    <Compile Include="Exceptions\ABSaveErrorHandler.cs" />
+    <Compile Include="Exceptions\InvalidABSaveTypeWhenSerializing.cs" />
+    <Compile Include="Serialization\ABSaveSerializer.cs" />
+    <Compile Include="ABSaveUtils.cs" />
+    <Compile Include="Serialization\ABSaveWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ABSoftware.ABSave.snk" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
