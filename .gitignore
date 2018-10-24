@@ -174,7 +174,7 @@ bld/
 TestResult.xml
 
 # Build Results of an ATL Project
-[Dd]ebugPS/
+*/bin/[Dd]ebugPS/
 [Rr]eleasePS/
 dlldata.c
 
@@ -417,31 +417,7 @@ __pycache__/
 # End of https://www.gitignore.io/api/macos,linux,windows,jetbrains,visualstudio,visualstudiocode
 
 ### ABSave Extra ###
-.vs\*
-ABSaveSerializer\bin\Debug
-ABSaveSerializer\bin\Release
-ABSaveSerializer\obj\Debug\*
-ABSaveSerializer\obj\Release\*
-ABSoftware.ABSave\bin\Debug
-ABSoftware.ABSave\bin\Release
-ABSoftware.ABSave\obj\Debug\*
-ABSoftware.ABSave\obj\Release\*
-ABSoftware.ABSave.UnitTests\bin\Debug
-ABSoftware.ABSave.UnitTests\bin\Release
-ABSoftware.ABSave.UnitTests\obj\Debug\*
-ABSoftware.ABSave.UnitTests\obj\Release\*
-
-# The below files keep the Resources working
-
-!ABSaveSerializer\obj\Debug\TempPE
-!ABSaveSerializer\obj\Debug\DesignTimeResolveAssemblyReferences.cache
-!ABSaveSerializer\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache
-!ABSaveSerializer\obj\Debug\CoreCompileInputs.cache
-!ABSaveSerializer\obj\Release\TempPE
-!ABSaveSerializer\obj\Release\DesignTimeResolveAssemblyReferences.cache
-!ABSaveSerializer\obj\Release\DesignTimeResolveAssemblyReferencesInput.cache
-!ABSaveSerializer\obj\Release\CoreCompileInputs.cache
-!packages
+.vs/*
 
 # Including the .idea directory within repositories is a BAD idea:
 # - contributors that do not use IntelliJ will end up producing commits later on

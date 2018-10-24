@@ -15,6 +15,7 @@ namespace ABSoftware.ABSave
         Array,
         Dictionary,
         Object,
+        Type,
         Unknown
     }
 }

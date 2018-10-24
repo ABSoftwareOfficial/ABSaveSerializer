@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ABSoftware.ABSave;
 using ABSoftware.ABSave.Serialization;
+using System.Diagnostics;
 
 namespace ABSoftware.ABSave.UnitTests
 {
@@ -12,43 +13,35 @@ namespace ABSoftware.ABSave.UnitTests
         public void WriteType_DifferentAssemblyType_ReturnsCertainString()
         {
             // Arrange
-
             var testClass = new TestClass();
 
             // Act
-
             var result = ABSaveWriter.WriteType(testClass.GetType());
 
             // Assert
-
-            Assert.AreEqual(result, testClass.GetType().FullName);
+            Assert.AreEqual("ABSoftware.ABSave.UnitTests.TestClass, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", result);
         }
 
         [TestCategory("Writing"), TestMethod]
         public void WriteType_SameAssemblyType_ReturnsCertainString()
         {
             // Act
-
             var result = ABSaveWriter.WriteType(typeof(ABSaveSerializer));
 
             // Assert
-
-            Assert.AreEqual(result, typeof(ABSaveSerializer).FullName);
+            Assert.AreEqual("ABSoftware.ABSave.Serialization.ABSaveSerializer, ABSoftware.ABSave, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f53d9b067ef2ae98", result);
         }
 
         [TestCategory("Writing"), TestMethod]
         public void Escape_NoNeedToEscapeString_ReturnsCertainString()
         {
             // Arrange
-
             var str = "ab as+_Ag[ag;g[sa]gas'#g;sg['asgas[]lfawa.";
 
             // Act
-
             var result = ABSaveWriter.Escape(str);
 
             // Assert
-
             Assert.AreEqual(result, str);
         }
 
@@ -56,15 +49,12 @@ namespace ABSoftware.ABSave.UnitTests
         public void Escape_OneReasonToEscapeString_ReturnsCertainString()
         {
             // Arrange
-
             var str = "ab as+_Ag[ag;g\u0001[sa]gas'#g;sg['asgas[]lfawa.";
 
             // Act
-
             var result = ABSaveWriter.Escape(str);
 
             // Assert
-
             Assert.AreEqual(result, "ab as+_Ag[ag;g\\\u0001[sa]gas'#g;sg['asgas[]lfawa.");
         }
 
@@ -72,15 +62,12 @@ namespace ABSoftware.ABSave.UnitTests
         public void Escape_ReasonsToEscapeString_ReturnsCertainString()
         {
             // Arrange
-
             var str = "ab as+_Ag[ag;g\u0001[sa]g\u0004as\u0005'#g;sg['\u0003asga\u0005s[]lfa\u0006wa.";
 
             // Act
-
             var result = ABSaveWriter.Escape(str);
 
             // Assert
-
             Assert.AreEqual(result, "ab as+_Ag[ag;g\\\u0001[sa]g\\\u0004as\\\u0005'#g;sg['\\\u0003asga\\\u0005s[]lfa\\\u0006wa.");
         }
 

@@ -11,6 +11,7 @@
     <AssemblyName>ABSoftware.ABSave</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>ABSoftware.ABSave.snk</AssemblyOriginatorKeyFile>
@@ -52,9 +55,24 @@
     <Compile Include="ABSaveConvert.cs" />
     <Compile Include="ABSavePrimitiveType.cs" />
     <Compile Include="ABSaveType.cs" />
+    <Compile Include="Deserialization\ABSaveDeserializer.cs" />
     <Compile Include="Deserialization\ABSaveParser.cs" />
-    <Compile Include="Exceptions\ABSaveErrorHandler.cs" />
+    <Compile Include="Deserialization\ABSaveTokens.cs" />
+    <Compile Include="Helpers\ABSaveParserItem.cs" />
+    <Compile Include="Exceptions\Base\ABSaveErrorHandler.cs" />
+    <Compile Include="Exceptions\Base\ABSaveErrors.cs" />
     <Compile Include="Exceptions\InvalidABSaveTypeWhenSerializing.cs" />
+    <Compile Include="Exceptions\InvalidConstructorsWhenCreatingObject.cs" />
+    <Compile Include="Exceptions\InvalidHeaderWhenParsing.cs" />
+    <Compile Include="Exceptions\InvalidValueInABSaveWhenParsing.cs" />
+    <Compile Include="Exceptions\MissingNameToValueWhenParsing.cs" />
+    <Compile Include="Exceptions\MoreNextItemTokensThanItems.cs" />
+    <Compile Include="Exceptions\TooManyConstructorsWithDifferentCase.cs" />
+    <Compile Include="Exceptions\UnexpectedTokenWhenParsing.cs" />
+    <Compile Include="Helpers\ABSaveParserItemType.cs" />
+    <Compile Include="Helpers\ABSaveObjectItemsDictionary.cs" />
+    <Compile Include="Helpers\ABSaveObjectItem.cs" />
+    <Compile Include="Helpers\ValueTypePair.cs" />
     <Compile Include="Serialization\ABSaveSerializer.cs" />
     <Compile Include="ABSaveUtils.cs" />
     <Compile Include="Serialization\ABSaveWriter.cs" />

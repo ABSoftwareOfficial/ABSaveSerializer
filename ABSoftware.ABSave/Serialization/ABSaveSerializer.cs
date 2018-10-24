@@ -20,6 +20,9 @@ using System.Text;
 using System.Threading.Tasks;
 using static ABSoftware.ABSave.ABSaveUtils;
 using System.Globalization;
+using ABSoftware.ABSave.Exceptions;
+using ABSoftware.ABSave.Exceptions.Base;
+using System.Collections;
 
 namespace ABSoftware.ABSave.Serialization
 {
@@ -39,20 +42,20 @@ namespace ABSoftware.ABSave.Serialization
         /// <param name="writeNextInstructionSymbol">Whether it will write \u0001 on the start - usually false if it is serializing the first object in a class.</param>
         /// <param name="dnWriteEndLevel">"Do Not Write End Level Symbol" - Marks whether to NOT write \u0005 (if true), commonly used for the last object of all.</param>
         /// <returns>If <paramref name="useSB"/> is false, this method will return the result as a string.</returns>
-        public static string Serialize(dynamic obj, ABSaveType type, out ABSavePrimitiveType determinedType, bool useSB = false, StringBuilder sb = null, bool writeNextInstructionSymbol = true, bool dnWriteEndLevel = false)
+        public static string Serialize(dynamic obj, ABSaveType type, out ABSavePrimitiveType determinedType, bool showTypes = true, bool useSB = false, StringBuilder sb = null, bool writeNextInstructionSymbol = true, bool dnWriteEndLevel = false, ABSaveErrorHandler errorHandler = null)
         {
             // This will be what to return if useSB is false.
             string ret = "";
 
-            // Remember what type the object is.
-            Type objType = obj.GetType();
-
             // For now, make it so we output "unknown".
             determinedType = ABSavePrimitiveType.Unknown;
 
-            // Check if the object is null, if so, write the null symbol.
-            if (obj == null)
+            // Check if the object is null... or an IntPtr, write the null symbol - otherwise, we could get a StackOverflowException.
+            if (obj == null || obj is IntPtr || obj is UIntPtr)
                 return ABSaveWriter.WriteNullItem(useSB, sb);
+
+            // Remember what type the object is.
+            Type objType = obj.GetType();
 
             // If the object is a string - write it as a string.
             if (obj is string)
@@ -71,14 +74,14 @@ namespace ABSoftware.ABSave.Serialization
             // If the object is an array - serialize it as an array.
             else if (IsArray(objType))
             {
-                ret = SerializeArray(obj, type, useSB, sb, dnWriteEndLevel);
+                ret = SerializeArray(obj, type, useSB, showTypes, sb, dnWriteEndLevel, errorHandler);
                 determinedType = ABSavePrimitiveType.Array;
             }
 
             // If the object is a dictionary - serialize it as a dictionary.
             else if (IsDictionary(objType))
             {
-                ret = SerializeDictionary(obj, type, useSB, sb, dnWriteEndLevel);
+                ret = SerializeDictionary(obj, type, showTypes, useSB, sb, dnWriteEndLevel, errorHandler);
                 determinedType = ABSavePrimitiveType.Dictionary;
             }
 
@@ -92,8 +95,15 @@ namespace ABSoftware.ABSave.Serialization
             // If the object is a DateTime - serialize it as a DateTime.
             else if (obj is DateTime)
             {
-                ret = SerializeDateTime(obj, writeNextInstructionSymbol, useSB, sb);
+                ret = SerializeDateTime(obj, writeNextInstructionSymbol, useSB, sb, errorHandler);
                 determinedType = ABSavePrimitiveType.DateTime;
+            }
+
+            // If it's a type, just write it out using the ABSaveWriter (for some reason there is no TypeConverter built-in for a type!)
+            else if (obj is Type)
+            {
+                ret = ABSaveWriter.WriteType(obj, showTypes, useSB, sb);
+                determinedType = ABSavePrimitiveType.Type;
             }
 
             // Otherwise, we'll attempt to find a built-in type converter (to a string)
@@ -118,7 +128,7 @@ namespace ABSoftware.ABSave.Serialization
 
                 // Otherwise, if it can't be type converted... Manually convert it.
                 else
-                    ret = SerializeObject(obj, type, objType, writeNextInstructionSymbol, useSB, sb, dnWriteEndLevel);
+                    ret = SerializeObject(obj, type, objType, showTypes, writeNextInstructionSymbol, useSB, sb, dnWriteEndLevel, errorHandler);
             }
 
             // Return the result from this.
@@ -134,10 +144,9 @@ namespace ABSoftware.ABSave.Serialization
         /// <param name="writeNextInstructionSymbol">Whether it will write \u0001 on the start - usually false if it is serializing the first object in a class.</param>
         /// <param name="dnWriteEndLevel">"Do Not Write End Level Symbol" - Marks whether to NOT write \u0005 (if true), commonly used for the last object of all.</param>
         /// <returns>If <paramref name="useSB"/> is false, this method will return the result as a string.</returns>
-        public static string Serialize(dynamic obj, ABSaveType type, bool useSB = false, StringBuilder sb = null, bool writeNextInstructionSymbol = true, bool dnWriteEndLevel = false)
+        public static string Serialize(dynamic obj, ABSaveType type, bool showTypes = true, bool useSB = false, StringBuilder sb = null, bool writeNextInstructionSymbol = true, bool dnWriteEndLevel = false, ABSaveErrorHandler errorHandler = null)
         {
-            var outEmpty = ABSavePrimitiveType.Unknown;
-            return Serialize(obj, type, out outEmpty, useSB, sb, writeNextInstructionSymbol, dnWriteEndLevel);
+            return Serialize(obj, type, out ABSavePrimitiveType outEmpty, showTypes, useSB, sb, writeNextInstructionSymbol, dnWriteEndLevel, errorHandler);
         }
 
         /// <summary>
@@ -163,7 +172,7 @@ namespace ABSoftware.ABSave.Serialization
         /// <param name="sb">The StringBuilder to write to - if <paramref name="useSB"/> is true.</param>
         /// <param name="dnWriteEndLevel">"Do Not Write End Level Symbol" - Marks whether to NOT write \u0005 (if true), commonly used for the last object of all.</param>
         /// <returns>If <paramref name="useSB"/> is false, this method will return the result as a string.</returns>
-        public static string SerializeObject(object obj, ABSaveType type, Type objType, bool writeNextInstructionSymbol = true, bool useSB = false, StringBuilder sb = null, bool dnWriteEndLevel = false)
+        public static string SerializeObject(object obj, ABSaveType type, Type objType, bool showTypes = true, bool writeNextInstructionSymbol = true, bool useSB = false, StringBuilder sb = null, bool dnWriteEndLevel = false, ABSaveErrorHandler errorHandler = null)
         {
             // Create a variable to store what we'll return - if we aren't using a StringBuilder.
             var ret = "";
@@ -172,13 +181,13 @@ namespace ABSoftware.ABSave.Serialization
             ret += ABSaveWriter.WriteNextItem(writeNextInstructionSymbol, useSB, sb);
 
             // First of all, write the opening for the object.
-            ret += ABSaveWriter.WriteObjectOpen(objType, useSB, sb);
+            ret += ABSaveWriter.WriteObjectOpen(objType, showTypes, useSB, sb);
 
             // Write the actual object, use the correct method for either string or for a StringBuilder.
             if (useSB)
-                ABSaveConvert.SerializeABSaveToStringBuilder(obj, type, sb, false);
+                ABSaveConvert.SerializeABSaveToStringBuilder(obj, type, sb, showTypes, false, 0, errorHandler);
             else
-                ret += ABSaveConvert.SerializeABSave(obj, type, 0, false);
+                ret += ABSaveConvert.SerializeABSave(obj, type, showTypes, 0, false, errorHandler);
 
             // Finally, write the ending for the object.
             ret += ABSaveWriter.WriteObjectClose(dnWriteEndLevel, useSB, sb);
@@ -196,8 +205,10 @@ namespace ABSoftware.ABSave.Serialization
         /// <param name="sb">The StringBuilder to write to - if <paramref name="useSB"/> is true.</param>
         /// <param name="dnWriteEndLevel">"Do Not Write End Level Symbol" - Marks whether to NOT write \u0005 (if true), commonly used for the last object of all.</param>
         /// <returns>If <paramref name="useSB"/> is false, this method will return the result as a string.</returns>
-        public static string SerializeArray(dynamic obj, ABSaveType type, bool useSB = false, StringBuilder sb = null, bool dnWriteEndLevel = false)
+        public static string SerializeArray(dynamic obj, ABSaveType type, bool showTypes = true, bool useSB = false, StringBuilder sb = null, bool dnWriteEndLevel = false, ABSaveErrorHandler errorHandler = null)
         {
+            obj = obj as IEnumerable;
+
             // Create a variable to store what we'll return.
             var ret = "";
 
@@ -217,9 +228,9 @@ namespace ABSoftware.ABSave.Serialization
                 // Now, we're not sure whether this array uses indexers or "ElementAt()"... So, we'll try an indexer, and if that doesn't work - just use "ElementAt".
                 try
                 { 
-                    ret += Serialize(obj[i], type, out lastType, useSB, sb, RequiresLowerInnerLevelSymbol(lastType) ? false : notFirst, dnWriteEndLevel);
+                    ret += Serialize(obj[i], type, out lastType, showTypes, useSB, sb, RequiresLowerInnerLevelSymbol(lastType) ? false : notFirst, dnWriteEndLevel, errorHandler);
                 } catch (Exception) {
-                    ret += Serialize(obj.ElementAt(i), type, out lastType, useSB, sb, RequiresLowerInnerLevelSymbol(lastType) ? false : notFirst, dnWriteEndLevel);
+                    ret += Serialize(obj.ElementAt(i), type, out lastType, showTypes, useSB, sb, RequiresLowerInnerLevelSymbol(lastType) ? false : notFirst, dnWriteEndLevel, errorHandler);
                 }
 
                 // Update the "notFirst" variable.
@@ -242,7 +253,7 @@ namespace ABSoftware.ABSave.Serialization
         /// <param name="sb">The StringBuilder to write to - if <paramref name="useSB"/> is true.</param>
         /// <param name="dnWriteEndLevel">"Do Not Write End Level Symbol" - Marks whether to NOT write \u0005 (if true), commonly used for the last object of all.</param>
         /// <returns>If <paramref name="useSB"/> is false, this method will return the result as a string.</returns>
-        public static string SerializeDictionary(dynamic obj, ABSaveType type, bool useSB = false, StringBuilder sb = null, bool dnWriteEndLevel = false)
+        public static string SerializeDictionary(dynamic obj, ABSaveType type, bool showTypes = true, bool useSB = false, StringBuilder sb = null, bool dnWriteEndLevel = false, ABSaveErrorHandler errorHandler = null)
         {
             // Create a variable to store what we'll return.
             var ret = "";
@@ -267,7 +278,7 @@ namespace ABSoftware.ABSave.Serialization
                     ret += element.Key;
 
                 // Serialize the item and write to either the StringBuilder or the "ret"
-                ret += Serialize(element.Value, type, useSB, sb, true, dnWriteEndLevel);
+                ret += Serialize(element.Value, type, showTypes, useSB, sb, true, dnWriteEndLevel, errorHandler);
 
                 // Update the "notFirst" variable if needed.
                 if (!notFirst)
@@ -289,7 +300,7 @@ namespace ABSoftware.ABSave.Serialization
         /// <param name="useSB">Whether this will write to a string builder (if true), or return a string (if false).</param>
         /// <param name="sb">The StringBuilder to write to - if <paramref name="useSB"/> is true.</param>
         /// <returns>If <paramref name="useSB"/> is false, this method will return the result as a string.</returns>
-        public static string SerializeDateTime(DateTime obj, bool writeNextInstructionSymbol = false,  bool useSB = false, StringBuilder sb = null)
+        public static string SerializeDateTime(DateTime obj, bool writeNextInstructionSymbol = false,  bool useSB = false, StringBuilder sb = null, ABSaveErrorHandler errorHandler = null)
         {
             // Write the ticks, we're using "WriteNumerical" because the ticks are a long.
             return ABSaveWriter.WriteNumerical(obj.Ticks, writeNextInstructionSymbol, useSB, sb);

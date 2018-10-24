@@ -29,3 +29,4 @@ I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSoftware.ABSave.UnitTests\obj
 I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSoftware.ABSave.UnitTests\obj\Debug\ABSoftware.ABSave.UnitTests.pdb
 I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSoftware.ABSave.UnitTests\obj\Debug\ABSoftware.ABSave.UnitTests.csprojAssemblyReference.cache
 I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSoftware.ABSave.UnitTests\obj\Debug\ABSoftware.ABSave.UnitTests.csproj.CopyComplete
+I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSoftware.ABSave.UnitTests\bin\Debug\ABParse.dll

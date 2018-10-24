@@ -30,3 +30,4 @@ I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSaveSerializer\bin\Debug\ABSo
 I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSaveSerializer\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
 I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSaveSerializer\bin\Debug\ABSoftware.ABSave.UnitTests.pdb
 I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSaveSerializer\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+I:\Desktop\Main Code\ABSoftware\ABSaveSerializer\ABSaveSerializer\bin\Debug\ABParse.dll

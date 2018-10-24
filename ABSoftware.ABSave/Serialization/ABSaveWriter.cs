@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,13 +32,17 @@ namespace ABSoftware.ABSave.Serialization
         /// <param name="useSB">Whether we are writing to a StringBuilder or not.</param>
         /// <param name="sb">The StringBuilder to write to - if we're writing to one at all.</param>
         /// <returns>Returns the type as a string.</returns>
-        public static string WriteType(Type typ, bool useSB = false, StringBuilder sb = null)
+        public static string WriteType(Type typ, bool writeTypes = true, bool useSB = false, StringBuilder sb = null)
         {
+            // Don't do anything if we're not meant to.
+            if (!writeTypes)
+                return "";
+
             // If we're using the StringBuilder - write to it... Otherwise, return the correct string.
             if (useSB)
-                sb.Append(typ.FullName);
+                sb.Append(typ.AssemblyQualifiedName);
             else
-                return typ.FullName;
+                return typ.AssemblyQualifiedName;
 
             // If we made it here - that means we were using a StringBuilder... So, just return nothing since it won't be used.
             return "";
@@ -148,13 +153,13 @@ namespace ABSoftware.ABSave.Serialization
         /// <param name="useSB">Whether we are writing to a StringBuilder or not.</param>
         /// <param name="sb">The StringBuilder to write to - if we're writing to one at all.</param>
         /// <returns>If <paramref name="useSB"/> is false, this method will return the result as a string.</returns>
-        public static string WriteObjectOpen(Type objType, bool useSB = false, StringBuilder sb = null)
+        public static string WriteObjectOpen(Type objType, bool showTypes = true, bool useSB = false, StringBuilder sb = null)
         {
             // Create a variable to store what we'll return.
             var ret = "";
 
             // Write the type.
-            ret += WriteType(objType, useSB, sb);
+            ret += WriteType(objType, showTypes, useSB, sb);
 
             // If we're using the StringBuilder - write the open object character to it... Otherwise, return the correct string.
             if (useSB)
@@ -235,9 +240,9 @@ namespace ABSoftware.ABSave.Serialization
         {
             // If we're using the StringBuilder - write to it... Otherwise, return the correct string.
             if (useSB)
-                sb.Append('\u0000');
+                sb.Append('\u0002');
             else
-                return "\u0000";
+                return "\u0002";
 
             // If we made it here - that means we were using a StringBuilder... So, just return nothing since it won't be used.
             return "";

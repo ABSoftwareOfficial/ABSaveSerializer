@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace ABSoftware.ABSave.Exceptions
 {
     /// <summary>
-    /// An exception for when <see cref="ABSaveType."/>
+    /// An exception for when <see cref="ABSaveType.Infer"/> is used on a serialize method.
     /// </summary>
-    public class InvalidABSaveTypeWhenSerializing : Exception
+    public class InferABSaveTypeWhenSerializing : Exception
     {
-        public InvalidABSaveTypeWhenSerializing(string message) : base(message) { }
+        public InferABSaveTypeWhenSerializing(string message) : base(message) { }
     }
 }
