@@ -70,7 +70,7 @@
     <Compile Include="Exceptions\TooManyConstructorsWithDifferentCase.cs" />
     <Compile Include="Exceptions\UnexpectedTokenWhenParsing.cs" />
     <Compile Include="Helpers\ABSaveParserItemType.cs" />
-    <Compile Include="Helpers\ABSaveObjectItemsDictionary.cs" />
+    <Compile Include="Helpers\ABSaveObjectItems.cs" />
     <Compile Include="Helpers\ABSaveObjectItem.cs" />
     <Compile Include="Helpers\ValueTypePair.cs" />
     <Compile Include="Serialization\ABSaveSerializer.cs" />

@@ -13,7 +13,7 @@ namespace ABSoftware.ABSave.Helpers
     /// <typeparam name="TName"></typeparam>
     /// <typeparam name="TValue"></typeparam>
     /// <typeparam name="TType"></typeparam>
-    public class ABSaveObjectItemsDictionary
+    public class ABSaveObjectItems
     {
         /// <summary>
         /// The actual items inside.

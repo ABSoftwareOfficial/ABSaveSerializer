@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ABSoftware.ABSave.Helpers
 {
     /// <summary>
-    /// An item used in <see cref="ABSaveObjectItemsDictionary" /> for storing a value as well as info (such as name/type)
+    /// An item used in <see cref="ABSaveObjectItems" /> for storing a value as well as info (such as name/type)
     /// </summary>
     public class ABSaveObjectItem
     {

@@ -102,7 +102,7 @@ namespace ABSoftware.ABSave
         /// <typeparam name="T">The type of the object.</typeparam>
         /// <param name="errorHandler">The way of handling any errors.</param>
         /// <param name="location">OPTIONAL: The location this happened in an ABSave string - used in any errors.</param>
-        public static object CreateInstance(Type type, ABSaveErrorHandler errorHandler, ABSaveObjectItemsDictionary values, int location = 0)
+        public static object CreateInstance(Type type, ABSaveErrorHandler errorHandler, ABSaveObjectItems values, int location = 0)
         {
             // Make sure that the error handler isn't null.
             errorHandler = ABSaveErrorHandler.EnsureNotNull(errorHandler);
@@ -232,7 +232,7 @@ namespace ABSoftware.ABSave
         /// <param name="obj">The object to insert values into.</param>
         /// <param name="values">The </param>
         /// <returns>The object with the values inserted.</returns>
-        public static object InsertValueIntoObject(object obj, ABSaveObjectItemsDictionary values)
+        public static object InsertValueIntoObject(object obj, ABSaveObjectItems values)
         {
             // Go through each value and add it.
             for (int i = 0; i < values.Count; i++)
@@ -246,10 +246,10 @@ namespace ABSoftware.ABSave
         /// Gets all the fields AND properties with their correct names.
         /// </summary>
         /// <returns>The fields and properties.</returns>
-        public static ABSaveObjectItemsDictionary GetFieldsAndPropertiesWithTypes(Type objType)
+        public static ABSaveObjectItems GetFieldsAndPropertiesWithTypes(Type objType)
         {
             // Make a name/value/type dictionary - this is what we'll return.
-            var ret = new ABSaveObjectItemsDictionary();
+            var ret = new ABSaveObjectItems();
 
             // Get all the fields.
             var fieldNames = objType.GetFields();
@@ -267,13 +267,13 @@ namespace ABSoftware.ABSave
         /// </summary>
         /// <typeparam name="T">The type of the object we're getting values for.</typeparam>
         /// <returns>The fields/properties and values for the object.</returns>
-        public static ABSaveObjectItemsDictionary GetFieldsAndPropertiesWithValues(object obj)
+        public static ABSaveObjectItems GetFieldsAndPropertiesWithValues(object obj)
         {
             // Get the type of the object to use in the rest of the method.
             var objType = obj.GetType();
 
             // Make a dictionary - this is what we'll return.
-            var ret = new ABSaveObjectItemsDictionary();
+            var ret = new ABSaveObjectItems();
 
             // First of all, get all of the fields.
             var fields = objType.GetFields();

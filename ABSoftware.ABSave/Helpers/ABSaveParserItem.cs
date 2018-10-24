@@ -28,7 +28,7 @@ namespace ABSoftware.ABSave.Helpers
         /// <summary>
         /// A dictionary representing the inner items in an object.
         /// </summary>
-        public ABSaveObjectItemsDictionary ObjectItems;
+        public ABSaveObjectItems ObjectItems;
 
         /// <summary>
         /// An actual representation of the dictionary in question.
@@ -74,7 +74,7 @@ namespace ABSoftware.ABSave.Helpers
         /// </summary>
         /// <param name="name">The name of this item.</param>
         /// <param name="value">The value in this item.</param>
-        public ABSaveParserItem(ABSaveObjectItemsDictionary items)
+        public ABSaveParserItem(ABSaveObjectItems items)
         {
             // This constructor is for an object, so make it an object.
             ItemType = ABSaveParserItemType.Object;
