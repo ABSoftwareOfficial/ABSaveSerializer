@@ -416,6 +416,8 @@ __pycache__/
 
 # End of https://www.gitignore.io/api/macos,linux,windows,jetbrains,visualstudio,visualstudiocode
 
+.vs\*
+
 # Including the .idea directory within repositories is a BAD idea:
 # - contributors that do not use IntelliJ will end up producing commits later on
 #   making changes to .idea that aren't really part of that commit, or just plain
@@ -423,4 +425,5 @@ __pycache__/
 # - it is nothing that IntelliJ can't reproduce, and may end up bundling configs
 #   that contributors don't want to use
 .idea/
+.vs/ABSaveSerializer/v15/Server/sqlite3/db.lock
 .vs/ABSaveSerializer/v15/Server/sqlite3/db.lock
