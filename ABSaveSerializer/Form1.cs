@@ -321,8 +321,6 @@ namespace ABSaveSerializer
         public int Great;
         public string Str;
 
-        public UltimateTestClass() { }
-
         public UltimateTestClass(int great)
         {
             Great = great + 3;
@@ -333,10 +331,10 @@ namespace ABSaveSerializer
             
         }
 
-        public UltimateTestClass(int great, string str)
+        public UltimateTestClass(int great, string str, bool k)
         {
-            Great = great + 3;
-            MessageBox.Show(str);
+            Great = great + 9;
+            Str = str + "YEET";
         }
     }
 }

@@ -221,6 +221,13 @@ namespace ABSoftware.ABSave.Deserialization
                     }
                     break;
 
+                // START OBJECT
+                //case nameof(ABSaveTokens.StartObject):
+
+                //    // If we were on a name, and we came across this, there's a problem, because, it's technically AFTER the name that this token is found.
+                //    if (!OnValue && ABSaveType == ABSaveType.WithNames)
+                //        ErrorHandler.UnexpectedTokenWhenParsing(CurrentLocation, "The character for starting an object");
+
                 // EXIT OBJECT
                 case nameof(ABSaveTokens.ExitObject):
 
@@ -234,7 +241,8 @@ namespace ABSoftware.ABSave.Deserialization
         protected override void OnEnd()
         {
             // If any objects haven't been closed yet, do that now - because, ABSave doesn't leave trailing "EXIT OBJECT"s.
-            FinishObject();
+            while (CurrentObjects.Count != 0)
+                FinishObject();
         }
 
         /// <summary>

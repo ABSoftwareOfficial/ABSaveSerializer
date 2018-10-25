@@ -104,19 +104,28 @@ namespace ABSoftware.ABSave
         /// <param name="location">OPTIONAL: The location this happened in an ABSave string - used in any errors.</param>
         public static object CreateInstance(Type type, ABSaveErrorHandler errorHandler, ABSaveObjectItems values, int location = 0)
         {
-            // Make sure that the error handler isn't null.
             errorHandler = ABSaveErrorHandler.EnsureNotNull(errorHandler);
+
+            // =======================
+            // Variables
+            // =======================
 
             // First of all, get all the constructor out of the type.
             var constructors = type.GetConstructors();
 
-            // Remember all the values if there was one with "No Case Match".
-            var noCaseMatchValues = new List<object>();
+            // Remember all the values if there was a constructor with "No Case Match".
+            object[] noCaseMatchValues = new object[0];
+
+            // Next, remember all the REMAINING values if there was a constructor with "No Case Match"
+            ABSaveObjectItems noCaseMatchRemaining = null;
 
             // Also, if we don't find a perfect constructor and there's too many "No Case Match" constructor, it will cause an error, so remember if there are more than one "No Case Match" constructors.
             var multipleNoCaseMatchConstructors = false;
 
-            // Then, go through each one and see which one is appropriate.
+            // =======================
+            // Each Constructor
+            // =======================
+
             for (int i = 0; i < constructors.Length; i++)
             {
                 // Keep track of whether all the parameters in this constructor are valid and how close they are to the real thing.
@@ -128,98 +137,123 @@ namespace ABSoftware.ABSave
 
                 // If there aren't any parameters, this is the one we preferably want.
                 if (parametersCount == 0)
-                    return InsertValueIntoObject(Activator.CreateInstance(type), values);
+                    return InsertValuesIntoObject(Activator.CreateInstance(type), values);
 
                 // Keep track of the parameters' values in order.
-                var parametersArguments = new List<object>();
+                var parametersArguments = new object[parametersCount];
 
-                // If there are too few parameters, this constructor won't work either, since data will get lost.
-                if (parametersCount < values.Count)
-                    continue;
+                // Also, keep track of any objects we were unable to pass into this constructor.
+                var remainingValues = new ABSaveObjectItems();
 
                 // If there are too many parameters, this constructor won't work.
                 if (parametersCount > values.Count)
                     continue;
 
-                // Otherwise, check them and see how well the parameters match their names and types.
-                for (int j = 0; j < parametersCount; j++)
+                // =======================
+                // Each Item - To Find A Matching Parameter
+                // =======================
+
+                for (int j = 0; j < values.Count; j++)
                 {
-                    // Keep track of what the value for this parameters could be.
-                    object value = null;
+                    // Whether a parameter was found or not.
+                    var parameterFound = ABSaveConstructorInferer.Failed;
 
-                    // Whether this parameter has passed or not.
-                    var parameterPassed = ABSaveConstructorInferer.Failed;
+                    // The index of the best parameter for this value.
+                    var bestParam = -1;
 
-                    // Now, figure out which item in the object this parameter could possibly point to.
-                    for (int k = 0; k < values.Count; k++)
+                    // =======================
+                    // Each Parameter
+                    // =======================
+
+                    for (int k = 0; k < parametersCount; k++)
                     {
-                        // If the types don't match, this failed, so break out of it.
-                        if (!(values.Items[k].Info.FieldType == parameters[j].ParameterType))
-                            break;
-                        
+                        // If the types don't match, this parameter failed, so try a different one.
+                        if (!(values.Items[j].Info.FieldType == parameters[k].ParameterType))
+                            continue;
+
                         // Check if the names perfectly match now.
                         if (values.Items[k].Info.Name == parameters[j].Name)
                         {
                             // This parameter is perfect.
-                            parameterPassed = ABSaveConstructorInferer.Perfect;
+                            parameterFound = ABSaveConstructorInferer.Perfect;
+                            bestParam = k;
 
-                            // Now, make sure we set this as the field for this parameter.
-                            value = values.Items[k].Value;
-
-                            // We want to break out of the "value" loop since this is a perfect match and it can't be anything else.
+                            // We want to break out of the "parameter" loop since this is a perfect match and it can't be anything else.
                             break;
                         }
 
                         // Otherwise, try and ignore the case and see if that helps.
                         else if (values.Items[k].Info.Name.ToLower() == parameters[j].Name.ToLower())
                         {
-                            parameterPassed = ABSaveConstructorInferer.NoCaseMatch;
+                            // Set the bestParam so that we can remember which parameter this was.
+                            bestParam = k;
 
                             // Now, make sure we set this as a POSSIBLE value for this parameter and see if any other fields would work better.
-                            value = values.Items[k].Value;
+                            parameterFound = ABSaveConstructorInferer.NoCaseMatch;
                             continue;
                         }
                     }
 
-                    // If it failed, break out of here since this parameter obviously can't work, and if one parameter doesn't work, the whole constructor won't either!
-                    if (parameterPassed == ABSaveConstructorInferer.Failed)
+                    // =======================
+                    // Check Value Results
+                    // ======================= 
+
+                    // If it failed, add this as failed value since it obviously can't work, and try some others!
+                    if (bestParam == -1)
                     {
-                        passed = ABSaveConstructorInferer.Failed;
-                        break;
+                        remainingValues.Add(values.Items[j]);
+                        continue;
                     }
 
-                    // Now, set the main "passed" variable for this constructor to how well this parameter did - but, if the constructor is on "No Case Match", leave it, since we know that this parameter didn't fail.
-                    // Essentially, when the constructor is on "NoCaseMatch" because one the parameters doesn't match case, it doesn't matter what the others are, they can't fix that one parameter.
+                    // Now, set the main "passed" variable for this constructor to how well this value did - but, if the constructor is on "No Case Match", leave it, since we know that this parameter didn't fail.
+                    // Essentially, when the constructor is on "NoCaseMatch" because one of the parameters doesn't match case, it doesn't matter what the others are, they can't fix that one parameter.
                     if (passed != ABSaveConstructorInferer.NoCaseMatch)
-                        passed = parameterPassed;
+                        passed = parameterFound;
 
-                    // Now that we've decided the best object, add that as the value.
-                    parametersArguments.Add(value);
+                    // Now that we've decided the best object for a certain parameter, add that as the value at the correct index.
+                    parametersArguments[bestParam] = values.Items[j].Value;
                 }
 
-                // If this was a perfect constructor, return this one!
-                if (passed == ABSaveConstructorInferer.Perfect)
-                    return Activator.CreateInstance(type, parametersArguments.ToArray());
+                // =======================
+                // Check Constructor Results
+                // =======================
 
-                // If it this constructor overall got a "No Case Match", attempt to place the values into the "noCaseMatchValues".
+                // If this was a perfect constructor, return this one - with all the remaining items getting added in!
+                if (passed == ABSaveConstructorInferer.Perfect)
+                    return InsertValuesIntoObject(Activator.CreateInstance(type, parametersArguments), remainingValues);
+
+                // If this constructor overall got a "No Case Match", attempt to place the values into the "noCaseMatchValues".
                 if (passed == ABSaveConstructorInferer.NoCaseMatch)
                 {
-                    // However, if there was already a "No Case Match", make sure we remember there's too many.
-                    if (noCaseMatchValues.Count > 0)
+                    // Determine how many values we were actually able to fill in a parameter as well as how many the LAST "No Case Match" constructor did.
+                    var filledParameters = values.Count - remainingValues.Count;
+                    var lastFilledParameters = (noCaseMatchRemaining == null) ? 0 : values.Count - noCaseMatchRemaining.Count;
+
+                    // If there was already a "No Case Match"... and we CAN'T override the last one, make sure we remember there's too many.
+                    if (noCaseMatchValues.Count() > 0 && ((lastFilledParameters == values.Count) || (lastFilledParameters > filledParameters)))
                         multipleNoCaseMatchConstructors = true;
 
-                    // Now, place the current values into the main array.
+                    // If we can override the last one, though, mark it as "false" since this is the parameter we need.
+                    else
+                        multipleNoCaseMatchConstructors = false;
+
+                    // Now, place the current values/remaining values into the main arrays.
                     noCaseMatchValues = parametersArguments;
+                    noCaseMatchRemaining = remainingValues;
                 }
             }
+
+            // =======================
+            // Check Final Results
+            // =======================
 
             // If we made it here, it means there weren't any PERFECT ones, so, before we attempt anything, we'll want to throw an error if we have come across more than one "No Case Match" constructor (in which case we wouldn't know what to use).
             if (multipleNoCaseMatchConstructors)
                 errorHandler.TooManyConstructorsWithDifferentCase(type, location);
 
             // And, now see if there was a "No Case Match" one, if so, that's the constructor we need!
-            if (noCaseMatchValues.Count > 0)
-                return Activator.CreateInstance(type, noCaseMatchValues.ToArray());
+            if (noCaseMatchValues.Count() > 0)
+                return InsertValuesIntoObject(Activator.CreateInstance(type, noCaseMatchValues), noCaseMatchRemaining);
 
             // And, if we got all the way here - it failed completely.
             errorHandler.InvalidConstructorsForCreatingObject(type, location);
@@ -232,7 +266,7 @@ namespace ABSoftware.ABSave
         /// <param name="obj">The object to insert values into.</param>
         /// <param name="values">The </param>
         /// <returns>The object with the values inserted.</returns>
-        public static object InsertValueIntoObject(object obj, ABSaveObjectItems values)
+        public static object InsertValuesIntoObject(object obj, ABSaveObjectItems values)
         {
             // Go through each value and add it.
             for (int i = 0; i < values.Count; i++)

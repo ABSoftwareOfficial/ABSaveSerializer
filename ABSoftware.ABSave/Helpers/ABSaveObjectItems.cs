@@ -54,7 +54,16 @@ namespace ABSoftware.ABSave.Helpers
         }
 
         /// <summary>
-        /// Adds a item to this NameValueTypeDictionary with a certain name, not caring about anything else.
+        /// Adds an item to this array.
+        /// </summary>
+        /// <param name="item">The exact item to add.</param>
+        public void Add(ABSaveObjectItem item)
+        {
+            Items.Add(item);
+        }
+
+        /// <summary>
+        /// Adds a item to this array with a certain name, not caring about anything else.
         /// </summary>
         /// <param name="info">Information about the item.</param>
         public void Add(FieldInfo info)
@@ -63,13 +72,27 @@ namespace ABSoftware.ABSave.Helpers
         }
 
         /// <summary>
-        /// Adds a item to this NameValueTypeDictionary with a certain name and value AND type.
+        /// Adds a item to this array with a certain name and value AND type.
         /// </summary>
         /// <param name="value">The actual value for this item.</param>
         /// <param name="info">The type for this item.</param>
         public void Add(object value, FieldInfo info)
         {
             Items.Add(new ABSaveObjectItem(value, info));
+        }
+
+        /// <summary>
+        /// Creates a new object item array.
+        /// </summary>
+        public ABSaveObjectItems() { }
+
+        /// <summary>
+        /// Creates a new object item array - based on a list of ABSaveObjectItems.
+        /// </summary>
+        /// <param name="items">The items for this array.</param>
+        public ABSaveObjectItems(List<ABSaveObjectItem> items)
+        {
+            Items = new List<ABSaveObjectItem>().ToList();
         }
     }
 }

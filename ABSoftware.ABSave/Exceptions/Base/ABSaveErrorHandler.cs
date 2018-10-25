@@ -90,7 +90,7 @@ namespace ABSoftware.ABSave.Exceptions.Base
         public void TooManyConstructorsWithDifferentCase(Type type, int location)
         {
             // Create EventArgs to pass around information about what happened.
-            var args = new ErrorEncounteredEventArgs(ABSaveError.TooManyConstructorsWithDifferentCase, location, "When creating an instance of an object, there were too many constructors with matching names to the fields/properties (when ignoring case)... As a result, ABSave cannot determine which constructor to use. This is with the type" + type.ToString());
+            var args = new ErrorEncounteredEventArgs(ABSaveError.TooManyConstructorsWithDifferentCase, location, "When creating an instance of an object, there were too many constructors with matching names to the fields/properties (when ignoring case)... As a result, ABSave cannot determine which constructor to use. This is with the type '" + type.ToString() + "'.");
 
             // Now, handle the error.
             HandleError(args, ABSaveError.TooManyConstructorsWithDifferentCase, new TooManyConstructorsWithDifferentCase(args.ToString()));

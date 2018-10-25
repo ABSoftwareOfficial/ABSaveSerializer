@@ -426,4 +426,3 @@ __pycache__/
 #   that contributors don't want to use
 .idea/
 .vs/ABSaveSerializer/v15/Server/sqlite3/db.lock
-.vs/ABSaveSerializer/v15/Server/sqlite3/db.lock
