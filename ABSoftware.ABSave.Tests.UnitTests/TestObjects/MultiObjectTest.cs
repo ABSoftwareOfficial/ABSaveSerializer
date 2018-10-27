@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ABSoftware.ABSave.Tests.UnitTests.TestObjects
+namespace ABSoftware.ABSave.Tests.UnitTests.TestObjects.TestObjects
 {
     /// <summary>
     /// A test class used to test multiple objects within each other - mainly used for testing "Show Types" and things like that.

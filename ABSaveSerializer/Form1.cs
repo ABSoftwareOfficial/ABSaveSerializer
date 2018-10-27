@@ -253,24 +253,24 @@ namespace ABSaveSerializer
 
             textBox1.Text = ABSaveConvert.SerializeABSave(testClass, ABSaveType.WithOutNames);
 
-            IDictionary<string, string> dict = new Dictionary<string, string>() { { "Key1", "Value1" }, { "Key2", "Value2"} };
-            textBox1.Text = ABSoftware.ABSave.Serialization.ABSaveSerializer.Serialize(dict as IDictionary<string, string>, ABSaveType.WithNames);
+            //IDictionary<string, string> dict = new Dictionary<string, string>() { { "Key1", "Value1" }, { "Key2", "Value2"} };
+            //textBox1.Text = ABSoftware.ABSave.Serialization.ABSaveSerializer.Serialize(dict as IDictionary<string, string>, ABSaveType.WithNames);
 
-            //textBox1.Text = ABSaveConvert.SerializeABSave(new TestClass(), ABSaveType.WithOutNames);
+            ////textBox1.Text = ABSaveConvert.SerializeABSave(new TestClass(), ABSaveType.WithOutNames);
 
-            // EXCEPTION TESTING:
-            var errHandler = new ABSoftware.ABSave.Exceptions.Base.ABSaveErrorHandler(ABSoftware.ABSave.Exceptions.Base.ABSaveError.InferTypeWhenSerializing);
-            errHandler.ErrorEncountered += (e2) =>
-            {
-                MessageBox.Show(e2.ToString());
-            };
+            //// EXCEPTION TESTING:
+            //var errHandler = new ABSoftware.ABSave.Exceptions.Base.ABSaveErrorHandler(ABSoftware.ABSave.Exceptions.Base.ABSaveError.InferTypeWhenSerializing);
+            //errHandler.ErrorEncountered += (e2) =>
+            //{
+            //    MessageBox.Show(e2.ToString());
+            //};
 
-            var maybe = ABSaveConvert.DeserializeABSave<UltimateTestClass>("UF\u0001Great\u00014727\u0001Str\u0001YES!YES!YES!", ABSaveType.WithNames);
+            //var maybe = ABSaveConvert.DeserializeABSave<UltimateTestClass>("UF\u0001Great\u00014727\u0001Str\u0001YES!YES!YES!", ABSaveType.WithNames);
 
-            var result2 = ABSaveDeserializer.Deserialize(ABSaveWriter.WriteType(typeof(TestClass)), typeof(TestClass), out ABSavePrimitiveType type, out bool parse);
-            MessageBox.Show(ABSoftware.ABSave.Serialization.ABSaveSerializer.Serialize(result2, ABSaveType.WithOutNames));
+            //var result2 = ABSaveDeserializer.Deserialize(ABSaveWriter.WriteType(typeof(TestClass)), typeof(TestClass), out ABSavePrimitiveType type, out bool parse);
+            //MessageBox.Show(ABSoftware.ABSave.Serialization.ABSaveSerializer.Serialize(result2, ABSaveType.WithOutNames));
 
-            textBox1.Text = ABSaveConvert.SerializeABSave(new MultiObjectTest(), ABSaveType.WithNames);
+            //textBox1.Text = ABSaveConvert.SerializeABSave(new MultiObjectTest(), ABSaveType.WithNames);
             //var instance = ABSaveUtils.CreateInstance<UltimateTestClass>(errHandler, new Dictionary<string, object>() { { "Great", 4 } });
             //MessageBox.Show(instance.ToString());
 

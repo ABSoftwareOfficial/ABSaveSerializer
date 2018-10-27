@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ABSoftware.ABSave.Tests.UnitTests.TestObjects
+namespace ABSoftware.ABSave.Tests.UnitTests.TestObjects.TestObjects
 {
     public class TestClass
     {

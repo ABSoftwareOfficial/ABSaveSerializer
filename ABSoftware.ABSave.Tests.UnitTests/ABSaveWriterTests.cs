@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ABSoftware.ABSave;
 using ABSoftware.ABSave.Serialization;
 using System.Diagnostics;
-using ABSoftware.ABSave.Tests.UnitTests.TestObjects;
+using ABSoftware.ABSave.Tests.UnitTests.TestObjects.TestObjects;
 
 namespace ABSoftware.ABSave.Tests.UnitTests
 {
@@ -20,7 +20,7 @@ namespace ABSoftware.ABSave.Tests.UnitTests
             var result = ABSaveWriter.WriteType(testClass.GetType());
 
             // Assert
-            Assert.AreEqual("ABSoftware.ABSave.Tests.UnitTests.TestClass, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", result);
+            Assert.AreEqual("ABSoftware.ABSave.Tests.UnitTests.TestObjects.TestObjects.TestClass, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", result);
         }
 
         [TestCategory("Writing"), TestMethod]
