@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using ABSoftware.ABSave.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ABSoftware.ABSave.Tests.UnitTests.TestObjects;
 
-namespace ABSoftware.ABSave.UnitTests
+namespace ABSoftware.ABSave.Tests.UnitTests
 {
     [TestClass]
     public class ABSaveConvertTests
     {
         #region Unnamed
-        [TestCategory("Serialization, Unnamed"), TestMethod]
+        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
         public void SerializeABSave_SaveObject_ReturnsString()
         {
             // Arrange
@@ -23,7 +24,7 @@ namespace ABSoftware.ABSave.UnitTests
             Assert.AreEqual("UT\u0001Oh, Hello!\u0001365\u0001" + ABSaveWriter.WriteType(typeof(NextClass)) + "\u0003F\u0005\u0004FirstStr\u0001SecondStr", result);
         }
 
-        [TestCategory("Serialization, Unnamed"), TestMethod]
+        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
         public void SerializeABSave_ComplexObject_ReturnsString()
         {
             // Arrange
@@ -252,12 +253,12 @@ namespace ABSoftware.ABSave.UnitTests
             Console.WriteLine(tmr.ElapsedMilliseconds);
 
             // Assert
-            Assert.AreEqual("UT\u0001\u0004ABSoftware.ABSave.UnitTests.Solar_System, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Milky Way\u0004ABSoftware.ABSave.UnitTests.Planet, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Mercury\u0004ABSoftware.ABSave.UnitTests.Animal, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Firefox\u0001Can survive ultra-high temperatures. Loves digging holes.\u000123\u0005ABSoftware.ABSave.UnitTests.Animal, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003AShift\u0001Shifts in and out of existence.\u0001100000\u0005ABSoftware.ABSave.UnitTests.Animal, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Unknown\u0001Unknown\u00010\u0005ABSoftware.ABSave.UnitTests.Animal, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Unknown #2\u0001Unknown #2\u00010\u0005\u0005\u0004ABSoftware.ABSave.UnitTests.Building, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Big Hole\u0001Somewhere\u0001ABSoftware.ABSave.UnitTests.Company, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Unknown\u00010\u00010\u00010\u000510000\u0001420768000000000\u0005\u0005\u0006ABSoftware.ABSave.UnitTests.WorkSite\u0001ABSoftware.ABSave.UnitTests.Building, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Biggest ever hole\u0001Somewhere Else\u0001ABSoftware.ABSave.UnitTests.Company, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Unknown\u00011\u00012\u00010\u0005100000000\u0001631196064000000000ABSoftware.ABSave.UnitTests.Planet, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Earth\u0004ABSoftware.ABSave.UnitTests.Animal, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Human\u0001Some mysterious creature that only humans (and maybe dolphins ;) ) know about.\u000160078000\u0005ABSoftware.ABSave.UnitTests.Animal, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Cat\u0001Cat Videos.\u0001100\u0005\u0005\u0004ABSoftware.ABSave.UnitTests.Building, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003The Shard\u000132 London Bridge Street, London SE1 9SG\u0001ABSoftware.ABSave.UnitTests.Company, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Stella Property\u00011000000000000\u0001100000\u0001632862720000000000\u000510000.3\u0001622994976000000000\u0005ABSoftware.ABSave.UnitTests.Building, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Unnamed\u000125 London Bridge Street, London XYZ XYZ\u0001ABSoftware.ABSave.UnitTests.Company, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Elegantly Small\u00011050101421\u000173\u0001631920960000000000\u0005110.528\u0001632291616000000000\u0005ABSoftware.ABSave.UnitTests.Building, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Simply Square\u0001176 XYZ Street, London XYZ ZYX\u0001ABSoftware.ABSave.UnitTests.Company, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003SimplBuild\u0001153\u00013\u0001636243552000000000\u0005240.24\u0001632777184000000000\u0005\u0005\u0006ABSoftware.ABSave.UnitTests.WorkSite\u0001ABSoftware.ABSave.UnitTests.Building, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003BrickShard\u00012521463 London Bridge Street, London XXZ XXZ\u0001ABSoftware.ABSave.UnitTests.Company, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Stella Property, Bigger, Better\u0001100000000124000043\u0001100000\u0001636018912000000000\u00052412.1\u00010\u0001ABSoftware.ABSave.UnitTests.WorkSite\u0001ABSoftware.ABSave.UnitTests.Building, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003SimplLarge HQ\u000154321 London Bridge Street, London ZYY XXZ\u0001ABSoftware.ABSave.UnitTests.Company, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Stella Property, Bigger, Better\u00011000000000000000043\u0001100000\u0001636018912000000000\u00052412.1\u00010", result);
+            Assert.AreEqual("UT\u0001\u0004ABSoftware.ABSave.Tests.UnitTests.Solar_System, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Milky Way\u0004ABSoftware.ABSave.Tests.UnitTests.Planet, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Mercury\u0004ABSoftware.ABSave.Tests.UnitTests.Animal, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Firefox\u0001Can survive ultra-high temperatures. Loves digging holes.\u000123\u0005ABSoftware.ABSave.Tests.UnitTests.Animal, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003AShift\u0001Shifts in and out of existence.\u0001100000\u0005ABSoftware.ABSave.Tests.UnitTests.Animal, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Unknown\u0001Unknown\u00010\u0005ABSoftware.ABSave.Tests.UnitTests.Animal, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Unknown #2\u0001Unknown #2\u00010\u0005\u0005\u0004ABSoftware.ABSave.Tests.UnitTests.Building, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Big Hole\u0001Somewhere\u0001ABSoftware.ABSave.Tests.UnitTests.Company, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Unknown\u00010\u00010\u00010\u000510000\u0001420768000000000\u0005\u0005\u0006ABSoftware.ABSave.Tests.UnitTests.WorkSite\u0001ABSoftware.ABSave.Tests.UnitTests.Building, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Biggest ever hole\u0001Somewhere Else\u0001ABSoftware.ABSave.Tests.UnitTests.Company, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Unknown\u00011\u00012\u00010\u0005100000000\u0001631196064000000000ABSoftware.ABSave.Tests.UnitTests.Planet, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Earth\u0004ABSoftware.ABSave.Tests.UnitTests.Animal, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Human\u0001Some mysterious creature that only humans (and maybe dolphins ;) ) know about.\u000160078000\u0005ABSoftware.ABSave.Tests.UnitTests.Animal, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Cat\u0001Cat Videos.\u0001100\u0005\u0005\u0004ABSoftware.ABSave.Tests.UnitTests.Building, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003The Shard\u000132 London Bridge Street, London SE1 9SG\u0001ABSoftware.ABSave.Tests.UnitTests.Company, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Stella Property\u00011000000000000\u0001100000\u0001632862720000000000\u000510000.3\u0001622994976000000000\u0005ABSoftware.ABSave.Tests.UnitTests.Building, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Unnamed\u000125 London Bridge Street, London XYZ XYZ\u0001ABSoftware.ABSave.Tests.UnitTests.Company, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Elegantly Small\u00011050101421\u000173\u0001631920960000000000\u0005110.528\u0001632291616000000000\u0005ABSoftware.ABSave.Tests.UnitTests.Building, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Simply Square\u0001176 XYZ Street, London XYZ ZYX\u0001ABSoftware.ABSave.Tests.UnitTests.Company, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003SimplBuild\u0001153\u00013\u0001636243552000000000\u0005240.24\u0001632777184000000000\u0005\u0005\u0006ABSoftware.ABSave.Tests.UnitTests.WorkSite\u0001ABSoftware.ABSave.Tests.UnitTests.Building, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003BrickShard\u00012521463 London Bridge Street, London XXZ XXZ\u0001ABSoftware.ABSave.Tests.UnitTests.Company, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Stella Property, Bigger, Better\u0001100000000124000043\u0001100000\u0001636018912000000000\u00052412.1\u00010\u0001ABSoftware.ABSave.Tests.UnitTests.WorkSite\u0001ABSoftware.ABSave.Tests.UnitTests.Building, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003SimplLarge HQ\u000154321 London Bridge Street, London ZYY XXZ\u0001ABSoftware.ABSave.Tests.UnitTests.Company, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003Stella Property, Bigger, Better\u00011000000000000000043\u0001100000\u0001636018912000000000\u00052412.1\u00010", result);
         }
         #endregion
 
         #region Named
-        [TestCategory("Serialization, Named"), TestMethod]
+        [TestCategory("Serialization, Named, With Types"), TestMethod]
         public void SerializeABSave_NAMEDSaveObject_ReturnsString()
         {
             // Arrange
@@ -268,6 +269,34 @@ namespace ABSoftware.ABSave.UnitTests
 
             // Assert
             Assert.AreEqual("NT\u0001str\u0001Oh, Hello!\u0001i\u0001365\u0001nextCl\u0001" + ABSaveWriter.WriteType(typeof(NextClass)) + "\u0003yoy\u0001F\u0005lstOfStr\u0004FirstStr\u0001SecondStr", result);
+        }
+
+        [TestCategory("Serialization, Named, With Types"), TestMethod]
+        public void SerializeABSave_WITHTYPESSaveObject_ReturnsString()
+        {
+            // Arrange
+            var testClass = new MultiObjectTest();
+
+            // Act
+            var result = ABSaveConvert.SerializeABSave(testClass, ABSaveType.WithNames);
+
+            // Assert
+            Assert.AreEqual("NT\u0001Str\u0001hmmmm, ok\u0001InnerArr\u0004ABSoftware.ABSave.Tests.UnitTests.TestObjects.MultiObjectInner, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003OK\u000136\u0005ABSoftware.ABSave.Tests.UnitTests.TestObjects.MultiObjectInner, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003OK\u000125\u0005\u0005InnerABSoftware.ABSave.Tests.UnitTests.TestObjects.MultiObjectInner, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\u0003OK\u00013612", result);
+
+        }
+
+        [TestCategory("Serialization, Named, Without Types"), TestMethod]
+        public void SerializeABSave_NOTYPESSaveObject_ReturnsString()
+        {
+            // Arrange
+            var testClass = new MultiObjectTest();
+
+            // Act
+            var result = ABSaveConvert.SerializeABSave(testClass, ABSaveType.WithNames, false);
+
+            // Assert
+            Assert.AreEqual("NF\u0001Str\u0001hmmmm, ok\u0001InnerArr\u0004\u0003OK\u000136\u0005\u0003OK\u000125\u0005\u0005Inner\u0003OK\u00013612", result);
+
         }
         #endregion
     }

@@ -74,7 +74,7 @@ namespace ABSoftware.ABSave.Serialization
             // If the object is an array - serialize it as an array.
             else if (IsArray(objType))
             {
-                ret = SerializeArray(obj, type, useSB, showTypes, sb, dnWriteEndLevel, errorHandler);
+                ret = SerializeArray(obj, type, showTypes, useSB, sb, dnWriteEndLevel, errorHandler);
                 determinedType = ABSavePrimitiveType.Array;
             }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ABSoftware.ABSave.Deserialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ABSoftware.ABSave.UnitTests
+namespace ABSoftware.ABSave.Tests.UnitTests
 {
     [TestClass]
     public class ABSaveDeserializerTests

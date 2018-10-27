@@ -1,0 +1,10 @@
+version: ABSave-{build}
+configuration: Release
+
+image: Visual Studio 2017
+build:
+  verbosity: minimal
+
+artifacts:
+- path: ABSoftware.ABSave\bin\Release\ABSoftware.ABSave.dll
+  name: ABSave

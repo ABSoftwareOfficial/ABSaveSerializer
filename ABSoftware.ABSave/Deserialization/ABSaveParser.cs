@@ -199,34 +199,20 @@ namespace ABSoftware.ABSave.Deserialization
                 // NEXT ITEM
                 case nameof(ABSaveTokens.NextItem):
 
-                    // If we're on a name, and we're in a named ABSave, get the name and place it into "CurrentName".
-                    if (!OnValue && ABSaveType == ABSaveType.WithNames)
-                        SetCurrentName(e.Trailing);
-
-                    // Otherwise, if we were on a name, we're now on a value.
-                    else
-                    {
-                        // We want to remember what index the item is at (particually when named) to save performance.
-                        var index = (ABSaveType == ABSaveType.WithNames) ? CurrentObjects.Last().ObjectItems.FindIndex(CurrentName) : CurrentItem.Last();
-
-                        // Parse the value, and get the result - we'll only "manuallyParse" for errors because if it was a different type, it would have an "EXIT OBJECT" at the end - not a "NEXT ITEM".
-                        var result = ABSaveDeserializer.Deserialize(e.Trailing, CurrentObjects.Last().ObjectItems.Items[index].Info.FieldType, out ABSavePrimitiveType determinedType, out bool manuallyParse, ErrorHandler, CurrentLocation);
-
-                        // So, if needs to be manually parsed, there's a problem.
-                        if (manuallyParse)
-                            ErrorHandler.InvalidValueInABSaveWhenParsing(CurrentLocation, "The ABSave string '" + e.Leading + "' is not valid for the type '" + CurrentObjects.Last().Type.ToString() + "'.");
-
-                        // Now, set the value, at the correct location.
-                        SetCurrentValue(index, result);
-                    }
+                    // Go onto the next item.
+                    NextItem(e);
                     break;
 
                 // START OBJECT
-                //case nameof(ABSaveTokens.StartObject):
+                case nameof(ABSaveTokens.StartObject):
 
-                //    // If we were on a name, and we came across this, there's a problem, because, it's technically AFTER the name that this token is found.
-                //    if (!OnValue && ABSaveType == ABSaveType.WithNames)
-                //        ErrorHandler.UnexpectedTokenWhenParsing(CurrentLocation, "The character for starting an object");
+                    // If we were on a name, and we came across this, there's a problem, because, it's technically AFTER the name that this token is found.
+                    if (!OnValue && ABSaveType == ABSaveType.WithNames)
+                        ErrorHandler.UnexpectedTokenWhenParsing(CurrentLocation, "The character for starting an object was found where a name should have been placed.");
+
+                    // Also, if we haven't finished on deciding 
+
+                    break;
 
                 // EXIT OBJECT
                 case nameof(ABSaveTokens.ExitObject):
@@ -234,7 +220,41 @@ namespace ABSoftware.ABSave.Deserialization
                     // This will finish up with the current object and actually turn it into an instance!
                     FinishObject();
 
+                    // Also, go onto the next item.
+
                     break;
+            }
+        }
+
+        private void NextItem(TokenProcessedEventArgs e)
+        {
+            // If we're on a name, and we're in a named ABSave, get the name and place it into "CurrentName".
+            if (!OnValue && ABSaveType == ABSaveType.WithNames)
+                SetCurrentName(e.Trailing);
+
+            // Otherwise, if we were on a name, we're now on a value.
+            else
+            {
+                // We want to remember what index the item is at (particually when named) to save performance.
+                var index = (ABSaveType == ABSaveType.WithNames) ? CurrentObjects.Last().ObjectItems.FindIndex(CurrentName) : CurrentItem.Last();
+
+                // Parse the value, and get the result - we'll only "manuallyParse" for errors because if it was a different type, it would have an "EXIT OBJECT" at the end - not a "NEXT ITEM".
+                var result = ABSaveDeserializer.Deserialize(e.Trailing, CurrentObjects.Last().ObjectItems.Items[index].Info.FieldType, out ABSavePrimitiveType determinedType, out bool manuallyParse, ErrorHandler, CurrentLocation);
+
+                //// If it determined it as an object, we'll take that and add it as a new object.
+                //if (determinedType == ABSavePrimitiveType.Object)
+                //{
+                //    // If the result is null - that means it couldn't get a valid type, so there's a problem.
+                //    if (result == null)
+                        
+                //}
+
+                // So, if needs to be manually parsed - and it isn't an object, there's a problem.
+                if (manuallyParse && determinedType != ABSavePrimitiveType.Object)
+                    ErrorHandler.InvalidValueInABSaveWhenParsing(CurrentLocation, "The ABSave string '" + e.Leading + "' is not valid for the type '" + CurrentObjects.Last().Type.ToString() + "'.");
+
+                // Now, set the value, at the correct location.
+                SetCurrentValue(index, result);
             }
         }
 

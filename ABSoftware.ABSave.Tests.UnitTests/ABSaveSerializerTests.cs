@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using ABSoftware.ABSave.Serialization;
 
-namespace ABSoftware.ABSave.UnitTests
+namespace ABSoftware.ABSave.Tests.UnitTests
 {
     [TestClass]
     public class ABSaveSerializerTests
@@ -25,7 +25,7 @@ namespace ABSoftware.ABSave.UnitTests
             Assert.AreEqual("\u000125325", result);
         }
 
-        [TestCategory("Serialization, Unnamed"), TestMethod]
+        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
         public void Serialize_DateTimeObject_ReturnsString()
         {
             // Arrange
@@ -38,7 +38,7 @@ namespace ABSoftware.ABSave.UnitTests
             Assert.AreEqual("\u000125325", result);
         }
 
-        [TestCategory("Serialization, Unnamed"), TestMethod]
+        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
         public void Serialize_BooleanObject_ReturnsString()
         {
             // Arrange
@@ -51,7 +51,7 @@ namespace ABSoftware.ABSave.UnitTests
             Assert.AreEqual("\u0001T", result);
         }
 
-        [TestCategory("Serialization, Unnamed"), TestMethod]
+        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
         public void Serialize_StringObject_ReturnsString()
         {
             // Arrange
@@ -64,7 +64,7 @@ namespace ABSoftware.ABSave.UnitTests
             Assert.AreEqual("\u0001Hello world!", result);
         }
 
-        [TestCategory("Serialization, Unnamed"), TestMethod]
+        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
         public void Serialize_IntegerObject_ReturnsString()
         {
             // Arrange
@@ -77,7 +77,7 @@ namespace ABSoftware.ABSave.UnitTests
             Assert.AreEqual("\u00017", result);
         }
 
-        [TestCategory("Serialization, Unnamed"), TestMethod]
+        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
         public void Serialize_LongObject_ReturnsString()
         {
             // Arrange
@@ -90,7 +90,7 @@ namespace ABSoftware.ABSave.UnitTests
             Assert.AreEqual("\u00017", result);
         }
 
-        [TestCategory("Serialization, Unnamed"), TestMethod]
+        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
         public void Serialize_DoubleObject_ReturnsString()
         {
             // Arrange
@@ -103,7 +103,7 @@ namespace ABSoftware.ABSave.UnitTests
             Assert.AreEqual("\u00017.23", result);
         }
 
-        [TestCategory("Serialization, Unnamed"), TestMethod]
+        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
         public void SerializeBool_TrueValue_ReturnsString()
         {
             // Arrange
@@ -116,7 +116,7 @@ namespace ABSoftware.ABSave.UnitTests
             Assert.AreEqual("\u0001T", result);
         }
 
-        [TestCategory("Serialization, Unnamed"), TestMethod]
+        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
         public void SerializeBool_FalseValue_ReturnsString()
         {
             // Arrange
@@ -129,7 +129,7 @@ namespace ABSoftware.ABSave.UnitTests
             Assert.AreEqual("\u0001F", result);
         }
 
-        [TestCategory("Serialization, Unnamed"), TestMethod]
+        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
         public void SerializeObject_SaveObject_ReturnsString()
         {
             // Arrange
@@ -142,7 +142,7 @@ namespace ABSoftware.ABSave.UnitTests
             Assert.AreEqual("\u0001" + ABSaveWriter.WriteType(typeof(TestClass)) + "\u0003Oh, Hello!\u0001365\u0001" + ABSaveWriter.WriteType(typeof(NextClass)) + "\u0003F\u0005\u0004FirstStr\u0001SecondStr\u0005", result);
         }
 
-        [TestCategory("Serialization, Unnamed"), TestMethod]
+        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
         public void SerializeArray_SingleItemArray_ReturnsString()
         {
             // Arrange
@@ -155,7 +155,7 @@ namespace ABSoftware.ABSave.UnitTests
             Assert.AreEqual("\u0004cool1\u0005", result);        
         }
 
-        [TestCategory("Serialization, Unnamed"), TestMethod]
+        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
         public void SerializeDictionary_StringStringDictionary_ReturnsString()
         {
             // Arrange
@@ -172,7 +172,7 @@ namespace ABSoftware.ABSave.UnitTests
             Assert.AreEqual("\u0006FirstKey\u0001FirstValue\u0001SecondKey\u0001SecondValue\u0005", result);
         }
 
-        [TestCategory("Serialization, Unnamed"), TestMethod]
+        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
         public void SerializeDateTime_DateTimeObject_ReturnsString()
         {
             // Arrange

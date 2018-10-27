@@ -1,7 +1,8 @@
 ﻿using ABSoftware.ABSave;
 using ABSoftware.ABSave.Deserialization;
 using ABSoftware.ABSave.Serialization;
-using ABSoftware.ABSave.UnitTests;
+using ABSoftware.ABSave.Tests.UnitTests;
+using ABSoftware.ABSave.Tests.UnitTests.TestObjects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -277,7 +278,7 @@ namespace ABSaveSerializer
             var result2 = ABSaveDeserializer.Deserialize(ABSaveWriter.WriteType(typeof(TestClass)), typeof(TestClass), out ABSavePrimitiveType type, out bool parse);
             MessageBox.Show(ABSoftware.ABSave.Serialization.ABSaveSerializer.Serialize(result2, ABSaveType.WithOutNames));
 
-            textBox1.Text = ABSaveConvert.SerializeABSave(new UltimateTestClass(5), ABSaveType.WithNames);
+            textBox1.Text = ABSaveConvert.SerializeABSave(new MultiObjectTest(), ABSaveType.WithNames);
             //var instance = ABSaveUtils.CreateInstance<UltimateTestClass>(errHandler, new Dictionary<string, object>() { { "Great", 4 } });
             //MessageBox.Show(instance.ToString());
 

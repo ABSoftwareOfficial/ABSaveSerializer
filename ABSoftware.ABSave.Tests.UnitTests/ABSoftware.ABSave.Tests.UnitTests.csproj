@@ -7,8 +7,8 @@
     <ProjectGuid>{229EFD7A-5CA3-4ABC-8711-CCC5F668BDA0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ABSoftware.ABSave.UnitTests</RootNamespace>
-    <AssemblyName>ABSoftware.ABSave.UnitTests</AssemblyName>
+    <RootNamespace>ABSoftware.ABSave.Tests.UnitTests</RootNamespace>
+    <AssemblyName>ABSoftware.ABSave.Tests.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -51,9 +51,10 @@
   <ItemGroup>
     <Compile Include="ABSaveDeserializerTests.cs" />
     <Compile Include="ABSaveWriterTests.cs" />
-    <Compile Include="ComplexSerializeTestClass.cs" />
+    <Compile Include="TestObjects\MultiObjectTest.cs" />
+    <Compile Include="TestObjects\ComplexSerializeTestClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerializeTestClass.cs" />
+    <Compile Include="TestObjects\SerializeTestClass.cs" />
     <Compile Include="ABSaveSerializerTests.cs" />
     <Compile Include="ABSaveConvertTests.cs" />
   </ItemGroup>

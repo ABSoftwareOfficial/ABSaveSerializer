@@ -2,12 +2,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("ABSoftware.ABSave.UnitTests")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("ABSave - UnitTests")]
+[assembly: AssemblyDescription("UnitTests for ABSave - NOT FOR PUBLIC USE (just a testing tool)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ABSoftware.ABSave.UnitTests")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyCompany("ABWorld")]
+[assembly: AssemblyProduct("")]
+[assembly: AssemblyCopyright("Copyright © ABWorld 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

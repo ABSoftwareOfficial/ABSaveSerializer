@@ -4,7 +4,7 @@ using ABSoftware.ABSave;
 using ABSoftware.ABSave.Serialization;
 using System.Diagnostics;
 
-namespace ABSoftware.ABSave.UnitTests
+namespace ABSoftware.ABSave.Tests.UnitTests
 {
     [TestClass]
     public class ABSaveWriterTests
@@ -19,7 +19,7 @@ namespace ABSoftware.ABSave.UnitTests
             var result = ABSaveWriter.WriteType(testClass.GetType());
 
             // Assert
-            Assert.AreEqual("ABSoftware.ABSave.UnitTests.TestClass, ABSoftware.ABSave.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", result);
+            Assert.AreEqual("ABSoftware.ABSave.Tests.UnitTests.TestClass, ABSoftware.ABSave.Tests.UnitTests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", result);
         }
 
         [TestCategory("Writing"), TestMethod]
