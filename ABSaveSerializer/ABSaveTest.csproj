@@ -79,6 +79,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ABSoftware.ABSave.Tests.UnitTests\ABSoftware.ABSave.Tests.UnitTests.csproj">
+      <Project>{229EFD7A-5CA3-4ABC-8711-CCC5F668BDA0}</Project>
+      <Name>ABSoftware.ABSave.Tests.UnitTests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ABSoftware.ABSave\ABSoftware.ABSave.csproj">
       <Project>{f957d31e-5af4-4d3a-bcb0-8d238153ad8a}</Project>
       <Name>ABSoftware.ABSave</Name>

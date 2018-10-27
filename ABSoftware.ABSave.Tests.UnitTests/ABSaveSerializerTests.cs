@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using ABSoftware.ABSave.Serialization;
+using ABSoftware.ABSave.Tests.UnitTests.TestObjects;
 
 namespace ABSoftware.ABSave.Tests.UnitTests
 {

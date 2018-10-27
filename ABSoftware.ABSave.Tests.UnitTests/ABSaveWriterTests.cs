@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ABSoftware.ABSave;
 using ABSoftware.ABSave.Serialization;
 using System.Diagnostics;
+using ABSoftware.ABSave.Tests.UnitTests.TestObjects;
 
 namespace ABSoftware.ABSave.Tests.UnitTests
 {
