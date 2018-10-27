@@ -1,17 +1,9 @@
 ﻿using ABSoftware.ABSave;
 using ABSoftware.ABSave.Deserialization;
 using ABSoftware.ABSave.Serialization;
-using ABSoftware.ABSave.Tests.UnitTests;
 using ABSoftware.ABSave.Tests.UnitTests.TestObjects;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ABSaveSerializer
