@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,9 +39,12 @@
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ABParse, Version=1.0.1.0, Culture=neutral, PublicKeyToken=1738a6cf4068a940, processorArchitecture=MSIL">
-      <HintPath>..\packages\ABParse.1.0.2\lib\net461\ABParse.dll</HintPath>
+    <Reference Include="ABParse, Version=1.0.3.0, Culture=neutral, PublicKeyToken=1738a6cf4068a940, processorArchitecture=MSIL">
+      <HintPath>..\packages\ABParse.1.0.3\lib\net40\ABParse.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -58,8 +62,10 @@
     <Compile Include="Deserialization\ABSaveDeserializer.cs" />
     <Compile Include="Deserialization\ABSaveParser.cs" />
     <Compile Include="Deserialization\ABSaveTokens.cs" />
-    <Compile Include="Helpers\ABSaveParserItem.cs" />
     <Compile Include="Exceptions\Base\ABSaveErrorHandler.cs" />
+    <Compile Include="Helpers\ABSaveIdentifiedType.cs" />
+    <Compile Include="Helpers\ABSaveParserItem.cs" />
+    <Compile Include="ABSaveSettings.cs" />
     <Compile Include="Exceptions\Base\ABSaveErrors.cs" />
     <Compile Include="Exceptions\InvalidABSaveTypeWhenSerializing.cs" />
     <Compile Include="Exceptions\InvalidConstructorsWhenCreatingObject.cs" />
@@ -82,6 +88,8 @@
     <None Include="ABSoftware.ABSave.snk" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Caching\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

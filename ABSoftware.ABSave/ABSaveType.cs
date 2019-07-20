@@ -16,7 +16,7 @@ namespace ABSoftware.ABSave
         /// 
         /// <para>NOTE: Sometimes we cannot ensure that reflection gives us all the fields in the EXACT order. If you want to make sure they'll DEFINITELY be in the right order - add the OrderAttribute to each field.</para>
         /// </summary>
-        WithOutNames,
+        NoNames,
 
         /// <summary>
         /// This will use names to allow ABSave to automatically place the values with the correct properties - this may not be as compact... But when you have something like a save

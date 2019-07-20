@@ -62,7 +62,7 @@ namespace ABSoftware.ABSave.Deserialization
                 _abSaveType = value;
 
                 // Now, if it got set to "WithOutNames" - make sure that "OnValue" stays true.
-                if (value == ABSaveType.WithOutNames)
+                if (value == ABSaveType.NoNames)
                     OnValue = true;
 
                 // Otherwise, make it go back to a name.
@@ -95,21 +95,6 @@ namespace ABSoftware.ABSave.Deserialization
         /// </summary>
         public bool OnValue = false;
 
-        /// <summary>
-        /// Whether we're on the key of a dictionary or not.
-        /// </summary>
-        public bool OnDictionaryValue = false;
-
-        /// <summary>
-        /// Whether we're in an array currently.
-        /// </summary>
-        public bool InArray = false;
-
-        /// <summary>
-        /// Whether we're in a dictionary currently.
-        /// </summary>
-        public bool InDictionary = false;
-
         #endregion
 
         #region Other
@@ -117,7 +102,7 @@ namespace ABSoftware.ABSave.Deserialization
         /// <summary>
         /// The main error handler for this parser.
         /// </summary>
-        public ABSaveErrorHandler ErrorHandler;
+        public ABSaveSettings Settings;
 
         #endregion
 
@@ -129,8 +114,8 @@ namespace ABSoftware.ABSave.Deserialization
         /// </summary>
         /// <param name="objType">The type of the object to parse.</param>
         /// <param name="type">The way to handle the ABSave string.</param>
-        /// <param name="errorHandler">The error handler for it.</param>
-        public ABSaveParser(ABSaveType type, ABSaveErrorHandler errorHandler = null)
+        /// <param name="settings">The settings for it.</param>
+        public ABSaveParser(ABSaveType type, ABSaveSettings settings)
         {
             // Set all the tokens for the ABSave.
             Tokens = new System.Collections.ObjectModel.ObservableCollection<ABParserToken>()
@@ -143,8 +128,9 @@ namespace ABSoftware.ABSave.Deserialization
                 new ABParserToken(nameof(ABSaveTokens.StartDictionary), '\u0006'),
             };
 
-            // Set the correct error handler.
-            ErrorHandler = ABSaveErrorHandler.EnsureNotNull(errorHandler, (e) => IsProcessing = false);
+            // Set the correct settings.
+            Settings = settings;
+            Settings.ErrorHandler.ErrorEncountered += (e) => IsProcessing = false;
 
             // Set the type for now.
             ABSaveType = type;
@@ -187,11 +173,15 @@ namespace ABSoftware.ABSave.Deserialization
                 // NULL ITEM
                 case nameof(ABSaveTokens.Null):
 
-                    //// If we're on the name and there's a NULL character, this isn't valid.
+                    //// If we're on the VALUE and there's a NULL character, this isn't valid.
                     //if (!OnValue)
                     //    ErrorHandler.UnexpectedTokenWhenParsing(CurrentLocation, "A NULL character was found on a name.");
 
                     // Now, we're probably on the name, since if you think about it, the name would be followed by \u0002 if the value is null (e.g. Hello\u0002 would set "Hello" to null).
+                    // Meaning, the value is not valid.
+                    if (OnValue)
+                        Settings.ErrorHandler.UnexpectedTokenWhenParsing(CurrentLocation, "A NULL character was found after a \u0001 token, which is not valid ABSave.");
+
                     // So, since the value is already null in our outline (CurrentObjects) - we don't need to do ANYTHING except move forward one!
                     CurrentItem[CurrentItem.Count - 1]++;
                     break;
@@ -206,9 +196,10 @@ namespace ABSoftware.ABSave.Deserialization
                 // START OBJECT
                 case nameof(ABSaveTokens.StartObject):
 
-                    // If we were on a name, and we came across this, there's a problem, because, it's technically AFTER the name that this token is found.
-                    if (!OnValue && ABSaveType == ABSaveType.WithNames)
-                        ErrorHandler.UnexpectedTokenWhenParsing(CurrentLocation, "The character for starting an object was found where a name should have been placed.");
+                    // If we were on a name, and we came across this, there's a problem, because, it's technically AFTER the value (which is the type) that this token is found.
+                    // But, it's alright if we aren't showing types.
+                    if (!OnValue && ABSaveType == ABSaveType.WithNames && HasTypes)
+                        Settings.ErrorHandler.UnexpectedTokenWhenParsing(CurrentLocation, "The character for starting an object was found where a name should have been placed.");
 
                     // Also, if we haven't finished on deciding 
 
@@ -220,7 +211,8 @@ namespace ABSoftware.ABSave.Deserialization
                     // This will finish up with the current object and actually turn it into an instance!
                     FinishObject();
 
-                    // Also, go onto the next item.
+                    // Also, go onto the next item - if we're in unnamed.
+                    CurrentItem[CurrentItem.Count - 1]++;
 
                     break;
             }
@@ -239,7 +231,7 @@ namespace ABSoftware.ABSave.Deserialization
                 var index = (ABSaveType == ABSaveType.WithNames) ? CurrentObjects.Last().ObjectItems.FindIndex(CurrentName) : CurrentItem.Last();
 
                 // Parse the value, and get the result - we'll only "manuallyParse" for errors because if it was a different type, it would have an "EXIT OBJECT" at the end - not a "NEXT ITEM".
-                var result = ABSaveDeserializer.Deserialize(e.Trailing, CurrentObjects.Last().ObjectItems.Items[index].Info.FieldType, out ABSavePrimitiveType determinedType, out bool manuallyParse, ErrorHandler, CurrentLocation);
+                var result = ABSaveDeserializer.Deserialize(e.Trailing, CurrentObjects.Last().ObjectItems.Items[index].Info.FieldType, Settings, out ABSavePrimitiveType determinedType, out bool manuallyParse, CurrentLocation);
 
                 //// If it determined it as an object, we'll take that and add it as a new object.
                 //if (determinedType == ABSavePrimitiveType.Object)
@@ -251,7 +243,7 @@ namespace ABSoftware.ABSave.Deserialization
 
                 // So, if needs to be manually parsed - and it isn't an object, there's a problem.
                 if (manuallyParse && determinedType != ABSavePrimitiveType.Object)
-                    ErrorHandler.InvalidValueInABSaveWhenParsing(CurrentLocation, "The ABSave string '" + e.Leading + "' is not valid for the type '" + CurrentObjects.Last().Type.ToString() + "'.");
+                    Settings.ErrorHandler.InvalidValueInABSaveWhenParsing(CurrentLocation, "The ABSave string '" + e.Leading + "' is not valid for the type '" + CurrentObjects.Last().Type.ToString() + "'.");
 
                 // Now, set the value, at the correct location.
                 SetCurrentValue(index, result);
@@ -275,7 +267,7 @@ namespace ABSoftware.ABSave.Deserialization
 
             // If we've gone forward too far in a object, there's a problem with the ABSave.
             if (CurrentItem.Last() > CurrentObjects.Last().ObjectItems.Count)
-                ErrorHandler.MoreNextItemTokensThanItems(CurrentLocation);
+                Settings.ErrorHandler.MoreNextItemTokensThanItems(CurrentLocation);
 
             // Mark us as now being on a value.
             OnValue = true;
@@ -289,7 +281,7 @@ namespace ABSoftware.ABSave.Deserialization
         {
             // If it's named and no name was provided, there's a problem.
             if (ABSaveType == ABSaveType.WithNames && string.IsNullOrEmpty(CurrentName))
-                ErrorHandler.MissingNameToValueWhenParsing(CurrentLocation);
+                Settings.ErrorHandler.MissingNameToValueWhenParsing(CurrentLocation);
 
             // If we got here, go ahead and add the value, the location is already provided to save performance.
             CurrentObjects.Last().ObjectItems.Items[location].Value = obj;
@@ -314,7 +306,7 @@ namespace ABSoftware.ABSave.Deserialization
             // If the token ISN'T a "Next Item" token, the header is obviously incorrect.
             if (e.Token.Name != nameof(ABSaveTokens.NextItem))
             {
-                ErrorHandler.InvalidHeaderWhenParsing("The header does not appear to follow the basic layout of 'U' or 'N' followed by a number.");
+                Settings.ErrorHandler.InvalidHeaderWhenParsing("The header does not appear to follow the basic layout of the ABSave header, which is optionally followed by a number.");
                 return;
             }
 
@@ -323,31 +315,20 @@ namespace ABSoftware.ABSave.Deserialization
             {
                 // Because there's no header, the ABSaveType won't be found out... So, if it's set to "infer" then obviously the type given is invalid and can't be worked out.
                 if (ABSaveType == ABSaveType.Infer)
-                    ErrorHandler.InvalidHeaderWhenParsing("This parser was given the ABSaveType of 'infer'... However, there is no header so it can't infer anything.");
+                    Settings.ErrorHandler.InvalidHeaderWhenParsing("This parser was given the ABSaveType of 'infer'... However, there is no header so it can't infer anything.");
 
                 // Now, there's nothing more to do here.
-                return;
-            }
-
-            // If we're here, there is header, however, it must be 2 or more characters.
-            if (e.Leading.Length < 2)
-            {
-                ErrorHandler.InvalidHeaderWhenParsing("The header was too short to be valid - and it wasn't empty either");
                 return;
             }
 
             // Lowercase the leading to make comparing easier.
             var leading = e.Leading.ToLower();
 
-            // If we need to get the type from the header - do it.
-            if (ABSaveType == ABSaveType.Infer)
-                GetTypeFromHeader(leading);
-
-            // Next, we need to get the "Write Type" bool.
-            GetShowTypesFromHeader(leading);
+            // Get the ABSave info from the header.
+            GetTypeFromHeader(leading);
 
             // Now, if there's more to the header - the rest should all be the version number.
-            if (leading.Length > 2)
+            if (leading.Length > 1)
             {
                 // Attempt to parse the version number.
                 bool passed = int.TryParse(leading.Substring(2, leading.Length - 2), out int version);
@@ -355,7 +336,7 @@ namespace ABSoftware.ABSave.Deserialization
                 // If it failed, throw an error.
                 if (!passed)
                 {
-                    ErrorHandler.InvalidHeaderWhenParsing("The version number following the type and show types identifiers is not valid - remember it should only be an integer.");
+                    Settings.ErrorHandler.InvalidHeaderWhenParsing("The version number following the type and show types identifiers is not valid - remember it should only be an integer.");
                     return;
                 }
 
@@ -368,7 +349,7 @@ namespace ABSoftware.ABSave.Deserialization
         }
 
         /// <summary>
-        /// Gets a type from the header - called from <see cref="EstablishedHeader"/>.
+        /// Gets the ABSave info from the header - called from <see cref="EstablishedHeader"/>.
         /// </summary>
         /// <param name="leading">The lowercase leading.</param>
         private void GetTypeFromHeader(string leading)
@@ -376,32 +357,42 @@ namespace ABSoftware.ABSave.Deserialization
             // Get the first character - now that we've confirmed there's at least ONE character in the leading.
             var firstChar = leading[0];
 
-            // If the character is a 'U' - that's unnamed.
-            if (firstChar == 'u')
-                ABSaveType = ABSaveType.WithOutNames;
-
-            // If it's an 'N' - that's named.
-            else if (firstChar == 'n')
-                ABSaveType = ABSaveType.WithNames;
-
-            // However, if the first character isn't any of them, it's invalid.
-            else
+            switch (firstChar)
             {
-                ErrorHandler.InvalidHeaderWhenParsing("The first character of the header provided is not valid ('U' or 'N').");
-                return;
+                case 'u':
+                    // Unnamed
+                    ABSaveType = ABSaveType.NoNames;
+
+                    // Has Types
+                    HasTypes = true;
+                    break;
+                case 'n':
+                    // Named
+                    ABSaveType = ABSaveType.WithNames;
+
+                    // Has Types
+                    HasTypes = true;
+                    break;
+                case 'v':
+                    // Unnamed
+                    ABSaveType = ABSaveType.NoNames;
+
+                    // No Types
+                    HasTypes = false;
+                    break;
+                case 'm':
+                    // Named
+                    ABSaveType = ABSaveType.WithNames;
+
+                    // No Types
+                    HasTypes = false;
+                    break;
+
+                default:
+                    // If the first character isn't any of them, it's invalid.
+                    Settings.ErrorHandler.InvalidHeaderWhenParsing("The first character of the header provided is not valid ('U' or 'N').");
+                    return;
             }
-
-            // We're all done, so go back to main "EstablishHeader" method!
-            return;
-        }
-
-        /// <summary>
-        /// Gets whether this string should show types from the header - called from <see cref="EstablishedHeader"/>.
-        /// </summary>
-        /// <param name="leading">The lowercase leading for the header.</param>
-        private void GetShowTypesFromHeader(string leading)
-        {
-            HasTypes = ABSaveDeserializer.DeserializeBool(leading[1].ToString(), ErrorHandler, 1);
         }
 
         #endregion
@@ -427,7 +418,7 @@ namespace ABSoftware.ABSave.Deserialization
         public void FinishObject()
         {
             // Create the object based on the data we've collected in the CurrentObjects.
-            var obj = ABSaveUtils.CreateInstance(CurrentObjects.Last().GetObjectType(), ErrorHandler, CurrentObjects.Last().ObjectItems);
+            var obj = ABSaveUtils.CreateInstance(CurrentObjects.Last().GetObjectType(), Settings, CurrentObjects.Last().ObjectItems);
 
             // Remove the last object from the CurrentObjects - since we're done with it now.
             CurrentObjects.RemoveAt(CurrentObjects.Count - 1);

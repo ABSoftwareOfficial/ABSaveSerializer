@@ -2,110 +2,98 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using ABSoftware.ABSave.Serialization;
-using ABSoftware.ABSave.Tests.UnitTests.TestObjects.TestObjects;
+using ABSoftware.ABSave.Tests.UnitTests.TestObjects;
+using ABSoftware.ABSave.Tests.VersionAssembly;
+using ABSoftware.ABSave.Tests.PKeyAndVersionAssembly;
 
 namespace ABSoftware.ABSave.Tests.UnitTests
 {
     [TestClass]
     public class ABSaveSerializerTests
     {
-        #region Unnamed
-        [TestMethod]
-        public void IGNORE_THIS_TEST()
-        {
-            // For some reason the first test that is run has an inaccurate time on it/runs really slow.
-            // So, to make the times fairer - this test is just a dummy to essentially soak up the slow time on the first one. Seriously, Microsoft, fix it (I think THEY need better tests - pun intended).
-            
-            // Arrange
-            DateTime obj = new DateTime(25325);
+        const string USerializationToString = "Serialization, Unnamed, With Types";
+        #region Unnamed, With Types, To String
 
-            // Act
-            var result = ABSaveSerializer.Serialize(obj, ABSaveType.WithOutNames);
-
-            // Assert
-            Assert.AreEqual("\u000125325", result);
-        }
-
-        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
-        public void Serialize_DateTimeObject_ReturnsString()
+        [TestCategory(USerializationToString), TestMethod]
+        public void Serialize_DateTimeObject()
         {
             // Arrange
-            DateTime obj = new DateTime(25325);
+            var obj = new DateTime(25325);
 
             // Act
-            var result = ABSaveSerializer.Serialize(obj, ABSaveType.WithOutNames);
+            var result = ABSaveSerializer.Serialize(obj, ABSaveType.NoNames, new ABSaveSettings());
 
             // Assert
-            Assert.AreEqual("\u000125325", result);
+            Assert.AreEqual("\u0007íb", result);
         }
 
-        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
-        public void Serialize_BooleanObject_ReturnsString()
+        [TestCategory(USerializationToString), TestMethod]
+        public void Serialize_BooleanObject()
         {
             // Arrange
             var obj = true;
 
             // Act
-            var result = ABSaveSerializer.Serialize(obj, ABSaveType.WithOutNames);
+            var result = ABSaveSerializer.Serialize(obj, ABSaveType.NoNames, new ABSaveSettings());
 
             // Assert
             Assert.AreEqual("\u0001T", result);
         }
 
-        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
-        public void Serialize_StringObject_ReturnsString()
+        [TestCategory(USerializationToString), TestMethod]
+        public void Serialize_StringObject()
         {
             // Arrange
             var obj = "Hello world!";
 
             // Act
-            var result = ABSaveSerializer.Serialize(obj, ABSaveType.WithOutNames);
+            var result = ABSaveSerializer.Serialize(obj, ABSaveType.NoNames, new ABSaveSettings());
 
             // Assert
             Assert.AreEqual("\u0001Hello world!", result);
         }
 
-        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
-        public void Serialize_IntegerObject_ReturnsString()
+        [TestCategory(USerializationToString), TestMethod]
+        public void Serialize_IntegerObject()
         {
             // Arrange
             var obj = 7;
 
             // Act
-            var result = ABSaveSerializer.Serialize(obj, ABSaveType.WithOutNames);
+            var result = ABSaveSerializer.Serialize(obj, ABSaveType.NoNames, new ABSaveSettings());
 
             // Assert
-            Assert.AreEqual("\u00017", result);
+            Assert.AreEqual("\u0001\a", result);
         }
 
-        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
-        public void Serialize_LongObject_ReturnsString()
+        [TestCategory(USerializationToString), TestMethod]
+        public void Serialize_LongObject()
         {
             // Arrange
             var obj = 7L;
 
             // Act
-            var result = ABSaveSerializer.Serialize(obj, ABSaveType.WithOutNames);
+            var result = ABSaveSerializer.Serialize(obj, ABSaveType.NoNames, new ABSaveSettings());
 
             // Assert
-            Assert.AreEqual("\u00017", result);
+            Assert.AreEqual("\u0001\a", result);
         }
 
-        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
-        public void Serialize_DoubleObject_ReturnsString()
+        [TestCategory(USerializationToString), TestMethod]
+        public void Serialize_DoubleObject()
         {
             // Arrange
             var obj = 7.23d;
 
             // Act
-            var result = ABSaveSerializer.Serialize(obj, ABSaveType.WithOutNames);
+            var result = ABSaveSerializer.Serialize(obj, ABSaveType.NoNames, new ABSaveSettings());
 
             // Assert
-            Assert.AreEqual("\u00017.23", result);
+            Assert.AreEqual("\b\bìQ¸\u001e\u0085ë\u001c@", result);
         }
 
-        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
-        public void SerializeBool_TrueValue_ReturnsString()
+        [TestCategory(USerializationToString), TestMethod]
+        public void SerializeBool_TrueValue()
         {
             // Arrange
             var obj = true;
@@ -117,8 +105,8 @@ namespace ABSoftware.ABSave.Tests.UnitTests
             Assert.AreEqual("\u0001T", result);
         }
 
-        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
-        public void SerializeBool_FalseValue_ReturnsString()
+        [TestCategory(USerializationToString), TestMethod]
+        public void SerializeBool_FalseValue()
         {
             // Arrange
             var obj = false;
@@ -130,34 +118,34 @@ namespace ABSoftware.ABSave.Tests.UnitTests
             Assert.AreEqual("\u0001F", result);
         }
 
-        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
-        public void SerializeObject_SaveObject_ReturnsString()
+        [TestCategory(USerializationToString), TestMethod]
+        public void SerializeObject_SaveObject()
         {
             // Arrange
             var test = new TestClass();
 
             // Act
-            var result = ABSaveSerializer.SerializeObject(test, ABSaveType.WithOutNames, test.GetType());
+            var result = ABSaveSerializer.SerializeObject(test, ABSaveType.NoNames, test.GetType(), new ABSaveSettings());
 
             // Assert
-            Assert.AreEqual("\u0001" + ABSaveWriter.WriteType(typeof(TestClass)) + "\u0003Oh, Hello!\u0001365\u0001" + ABSaveWriter.WriteType(typeof(NextClass)) + "\u0003F\u0005\u0004FirstStr\u0001SecondStr\u0005", result);
+            Assert.AreEqual("\u0001ABSoftware.ABSave.Tests.UnitTests.TestObjects.TestClass,ABSoftware.ABSave.Tests.UnitTests\0\0\u0003Oh, Hello!\am\u0001\u0001ABSoftware.ABSave.Tests.UnitTests.TestObjects.NextClass,ABSoftware.ABSave.Tests.UnitTests\u0001\0\u0003F\u0005\u0004FirstStr\u0001SecondStr\u0005", result);
         }
 
-        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
-        public void SerializeArray_SingleItemArray_ReturnsString()
+        [TestCategory(USerializationToString), TestMethod]
+        public void SerializeArray_SingleItemArray()
         {
             // Arrange
             var test = new List<string>() { "cool1" };
 
             // Act
-            var result = ABSaveSerializer.SerializeArray(test, ABSaveType.WithOutNames);
+            var result = ABSaveSerializer.SerializeArray(test, typeof(List<string>), ABSaveType.NoNames, new ABSaveSettings());
 
             // Assert
             Assert.AreEqual("\u0004cool1\u0005", result);        
         }
 
-        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
-        public void SerializeDictionary_StringStringDictionary_ReturnsString()
+        [TestCategory(USerializationToString), TestMethod]
+        public void SerializeDictionary_StringStringDictionary()
         {
             // Arrange
             var test = new Dictionary<string, string>()
@@ -167,14 +155,14 @@ namespace ABSoftware.ABSave.Tests.UnitTests
             };
 
             // Act
-            var result = ABSaveSerializer.SerializeDictionary(test, ABSaveType.WithOutNames);
+            var result = ABSaveSerializer.SerializeDictionary(test, ABSaveType.NoNames, new ABSaveSettings());
 
             // Assert
             Assert.AreEqual("\u0006FirstKey\u0001FirstValue\u0001SecondKey\u0001SecondValue\u0005", result);
         }
 
-        [TestCategory("Serialization, Unnamed, With Types"), TestMethod]
-        public void SerializeDateTime_DateTimeObject_ReturnsString()
+        [TestCategory(USerializationToString), TestMethod]
+        public void SerializeDateTime_DateTimeObject()
         {
             // Arrange
             DateTime obj = new DateTime(253253526);
@@ -183,8 +171,58 @@ namespace ABSoftware.ABSave.Tests.UnitTests
             var result = ABSaveSerializer.SerializeDateTime(obj);
 
             // Assert
-            Assert.AreEqual("253253526", result);
+            Assert.AreEqual("\b\u0004\u0096W\u0018\u000f", result);
         }
         #endregion
+
+        [TestCategory(USerializationToString), TestMethod]
+        public void SerializeType_NoVersion_NoPublicKey()
+        {
+            // Act
+            var result = ABSaveSerializer.SerializeType(typeof(ABSaveSerializerTests));
+
+            // Assert
+            Assert.AreEqual("ABSoftware.ABSave.Tests.UnitTests.ABSaveSerializerTests,ABSoftware.ABSave.Tests.UnitTests", result);
+        }
+
+        [TestCategory(USerializationToString), TestMethod]
+        public void SerializeType_NoVersion_PublicKey()
+        {
+            // Act
+            var result = ABSaveSerializer.SerializeType(typeof(ABSaveSerializer));
+
+            // Assert
+            Assert.AreEqual("ABSoftware.ABSave.Serialization.ABSaveSerializer,ABSoftware.ABSave,,,õ=\u009b\u0006~ò®\u0098", result);
+        }
+
+        [TestCategory(USerializationToString), TestMethod]
+        public void SerializeType_Version_NoPublicKey()
+        {
+            // Act
+            var result = ABSaveSerializer.SerializeType(typeof(VersionClass));
+
+            // Assert
+            Assert.AreEqual("ABSoftware.ABSave.Tests.VersionAssembly.VersionClass,ABSoftware.ABSave.Tests.VersionAssembly,\u0009\0\0\0.\u0005\0\0\0.\u0003\0\0\0.\u0007\0\0\0", result);
+        }
+
+        [TestCategory(USerializationToString), TestMethod]
+        public void SerializeType_Version_PublicKey()
+        {
+            // Act
+            var result = ABSaveSerializer.SerializeType(typeof(PublicKeyAndVersionClass));
+
+            // Assert
+            Assert.AreEqual("ABSoftware.ABSave.Tests.PKeyAndVersionAssembly.PublicKeyAndVersionClass,ABSoftware.ABSave.Tests.PKeyAndVersionAssembly,\u0009\0\0\0.\u0005\0\0\0.\u0003\0\0\0.\u0007\0\0\0,,R\tG4 \u0083;¬", result);
+        }
+
+        [TestCategory(USerializationToString), TestMethod]
+        public void SerializeTypeBeforeObject_NoVersion_PublicKey()
+        {
+            // Act
+            var result = ABSaveSerializer.SerializeTypeBeforeObject(typeof(ABSaveSerializer), new ABSaveSettings());
+
+            // Assert
+            Assert.AreEqual("ABSoftware.ABSave.Serialization.ABSaveSerializer,ABSoftware.ABSave,,,õ=\u009b\u0006~ò®\u0098\0\0", result);
+        }
     }
 }

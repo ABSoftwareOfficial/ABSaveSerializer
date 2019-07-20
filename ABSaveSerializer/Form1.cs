@@ -1,9 +1,14 @@
 ﻿using ABSoftware.ABSave;
 using ABSoftware.ABSave.Deserialization;
+using ABSoftware.ABSave.Exceptions.Base;
 using ABSoftware.ABSave.Serialization;
 using ABSoftware.ABSave.Tests.UnitTests.TestObjects;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Windows.Forms;
 
 namespace ABSaveSerializer
@@ -17,6 +22,7 @@ namespace ABSaveSerializer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
             var dtimeobj = new DateTime(2024, 4, 21, 7, 54, 32, 242);
             var dtimeres = ABSoftware.ABSave.Serialization.ABSaveSerializer.SerializeDateTime(dtimeobj);
 
@@ -28,10 +34,10 @@ namespace ABSaveSerializer
 
             // Act
 
-            var result = ABSoftware.ABSave.Serialization.ABSaveSerializer.SerializeDictionary(testDict, ABSaveType.WithOutNames);
+            var result = ABSoftware.ABSave.Serialization.ABSaveSerializer.SerializeDictionary(testDict, ABSaveType.NoNames, new ABSaveSettings());
 
             TestClass test = new TestClass();
-            textBox1.Text = ABSaveConvert.SerializeABSave(test, ABSaveType.WithOutNames);
+            textBox1.Text = ABSaveConvert.ObjectToABSave(test, ABSaveType.NoNames, new ABSaveSettings());
 
             var testClass = new ComplexSerializeTestClass()
             {
@@ -251,7 +257,7 @@ namespace ABSaveSerializer
                 }
             };
 
-            textBox1.Text = ABSaveConvert.SerializeABSave(testClass, ABSaveType.WithOutNames);
+            textBox1.Text = ABSaveConvert.ObjectToABSave(testClass, ABSaveType.NoNames, new ABSaveSettings());
 
             //IDictionary<string, string> dict = new Dictionary<string, string>() { { "Key1", "Value1" }, { "Key2", "Value2"} };
             //textBox1.Text = ABSoftware.ABSave.Serialization.ABSaveSerializer.Serialize(dict as IDictionary<string, string>, ABSaveType.WithNames);
@@ -287,6 +293,87 @@ namespace ABSaveSerializer
             //// Assert
 
             //textBox1.Text = aresult;
+
+            DebugParser();
+
+            NumberExperimenting();
+
+        }
+
+        public void DebugParser()
+        {
+            var headerTest = new char[] { 'u', 'n', 'v', 'm' };
+
+            for (int i = 0; i < headerTest.Length; i++)
+            {
+                var parser = new ABSaveParser<TestClass>(ABSaveType.WithNames, new ABSaveSettings(new ABSaveErrorHandler(ABSoftware.ABSave.Exceptions.Base.ABSaveError.InvalidValueInABSaveWhenParsing, 
+                    (e) => MessageBox.Show("ERROR: " + e.Message))));
+
+                parser.Start(headerTest[i] + "\u0001str\u0001heyhey\u0001i\u00011617");
+
+                Console.WriteLine("debug");
+            }
+        }
+
+        private static void NumberExperimenting()
+        {
+            var num = 216161;
+            var bytes = BitConverter.GetBytes(num);
+
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(bytes);
+
+            Console.ReadLine();
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(bytes);
+
+            var num_recreate = BitConverter.ToInt32(bytes, 0);
+
+            // Convert a decimal to bytes 
+            Stopwatch watch = Stopwatch.StartNew();
+
+            decimal dec = 261663061631136316003160.1616754194237272794327232324747478442882884282m;
+
+            var decBytes = decimal.GetBits(dec);
+
+            var final = new byte[16];
+
+            BitConverter.GetBytes(decBytes[0]).CopyTo(final, 0);
+            BitConverter.GetBytes(decBytes[1]).CopyTo(final, 4);
+            BitConverter.GetBytes(decBytes[2]).CopyTo(final, 8);
+            BitConverter.GetBytes(decBytes[3]).CopyTo(final, 12);
+
+            watch.Stop();
+            Console.WriteLine(watch.ElapsedMilliseconds + ": " + watch.ElapsedTicks);
+
+            // Convert back.
+            Stopwatch watch2 = Stopwatch.StartNew();
+
+            var recreate_arr = new int[4];
+
+            recreate_arr[0] = BitConverter.ToInt32(final, 0);
+            recreate_arr[1] = BitConverter.ToInt32(final, 4);
+            recreate_arr[2] = BitConverter.ToInt32(final, 8);
+            recreate_arr[3] = BitConverter.ToInt32(final, 12);
+
+            var finalDec = new decimal(recreate_arr);
+
+            watch2.Stop();
+
+
+            // Test byte lengths.
+            var single = BitConverter.GetBytes(612316f);
+            var dou = BitConverter.GetBytes(362361d);
+
+            while (true)
+            {
+                var current = ABSaveWriter.WriteNumerical(626136617721, TypeCode.Int64, false);
+
+                Console.WriteLine(watch2.ElapsedMilliseconds + ": " + watch2.ElapsedTicks);
+            }
+
+
+            //BitConverter.
         }
     }
 

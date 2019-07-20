@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABSaveTest", "ABSaveSerializer\ABSaveTest.csproj", "{BF5AA535-A51D-40AA-823F-16B7448FE148}"
 EndProject
@@ -10,6 +10,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABSoftware.ABSave.Tests.PerformanceTests", "ABSoftware.ABSave.Tests.PerformanceTests\ABSoftware.ABSave.Tests.PerformanceTests.csproj", "{F0F0B0CB-5E59-4B06-98D0-312B653F96B6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABSoftware.ABSave.Tests.UnitTests", "ABSoftware.ABSave.Tests.UnitTests\ABSoftware.ABSave.Tests.UnitTests.csproj", "{229EFD7A-5CA3-4ABC-8711-CCC5F668BDA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABSoftware.ABSave.Tests.VersionAssembly", "ABSoftware.ABSave.Tests.VersionAssembly\ABSoftware.ABSave.Tests.VersionAssembly.csproj", "{1DCB9362-3375-4479-98D0-B000DD855C7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABSoftware.ABSave.Tests.PKeyAndVersionAssembly", "ABSoftware.ABSave.Tests.PKeyAndVersionAssembly\ABSoftware.ABSave.Tests.PKeyAndVersionAssembly.csproj", "{633D866C-4332-42AC-9CA8-99DD812F7239}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{229EFD7A-5CA3-4ABC-8711-CCC5F668BDA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{229EFD7A-5CA3-4ABC-8711-CCC5F668BDA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{229EFD7A-5CA3-4ABC-8711-CCC5F668BDA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DCB9362-3375-4479-98D0-B000DD855C7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DCB9362-3375-4479-98D0-B000DD855C7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DCB9362-3375-4479-98D0-B000DD855C7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DCB9362-3375-4479-98D0-B000DD855C7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{633D866C-4332-42AC-9CA8-99DD812F7239}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{633D866C-4332-42AC-9CA8-99DD812F7239}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{633D866C-4332-42AC-9CA8-99DD812F7239}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{633D866C-4332-42AC-9CA8-99DD812F7239}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

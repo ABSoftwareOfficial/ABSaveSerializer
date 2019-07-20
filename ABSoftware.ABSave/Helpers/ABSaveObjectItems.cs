@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ABSoftware.ABSave.Helpers
 {
     /// <summary>
     /// A helper dictionary with a name, value, type AND "FieldInfo" (used for fields/properties when parsing)
     /// </summary>
-    /// <typeparam name="TName"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    /// <typeparam name="TType"></typeparam>
     public class ABSaveObjectItems
     {
         /// <summary>
@@ -27,7 +21,7 @@ namespace ABSoftware.ABSave.Helpers
         public int FindIndex(string name)
         {
             // Go through each item, and find its index.
-            for (int i = 0; i < Items.Count; i++)
+            for (var i = 0; i < Items.Count; i++)
                 if (Items[i].Info.Name == name)
                     return i;
 
@@ -48,38 +42,26 @@ namespace ABSoftware.ABSave.Helpers
         /// <summary>
         /// The amount of items in this dictionary.
         /// </summary>
-        public int Count
-        {
-            get { return Items.Count; }
-        }
+        public int Count => Items.Count;
 
         /// <summary>
         /// Adds an item to this array.
         /// </summary>
         /// <param name="item">The exact item to add.</param>
-        public void Add(ABSaveObjectItem item)
-        {
-            Items.Add(item);
-        }
+        public void Add(ABSaveObjectItem item) => Items.Add(item);
 
         /// <summary>
         /// Adds a item to this array with a certain name, not caring about anything else.
         /// </summary>
         /// <param name="info">Information about the item.</param>
-        public void Add(FieldInfo info)
-        {
-            Items.Add(new ABSaveObjectItem(info));
-        }
+        public void Add(FieldInfo info) => Items.Add(new ABSaveObjectItem(info));
 
         /// <summary>
         /// Adds a item to this array with a certain name and value AND type.
         /// </summary>
         /// <param name="value">The actual value for this item.</param>
         /// <param name="info">The type for this item.</param>
-        public void Add(object value, FieldInfo info)
-        {
-            Items.Add(new ABSaveObjectItem(value, info));
-        }
+        public void Add(object value, FieldInfo info) => Items.Add(new ABSaveObjectItem(value, info));
 
         /// <summary>
         /// Creates a new object item array.
@@ -90,9 +72,6 @@ namespace ABSoftware.ABSave.Helpers
         /// Creates a new object item array - based on a list of ABSaveObjectItems.
         /// </summary>
         /// <param name="items">The items for this array.</param>
-        public ABSaveObjectItems(List<ABSaveObjectItem> items)
-        {
-            Items = new List<ABSaveObjectItem>().ToList();
-        }
+        public ABSaveObjectItems(List<ABSaveObjectItem> items) => Items = items;
     }
 }

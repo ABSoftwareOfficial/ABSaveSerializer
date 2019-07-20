@@ -46,6 +46,7 @@ namespace ABSoftware.ABSave
     /// </summary>
     public static class ABSaveUtils
     {
+        #region Types
         public static bool IsArray(Type t)
         {
             if (t.IsArray)
@@ -54,9 +55,9 @@ namespace ABSoftware.ABSave
             return t.IsGenericType && t.GetGenericTypeDefinition() == typeof(List<>);
         }
 
-        public static bool IsNumericType(Type t)
+        public static bool IsNumericType(TypeCode tCode)
         {
-            switch (Type.GetTypeCode(t))
+            switch (tCode)
             {
                 case TypeCode.Byte:
                 case TypeCode.SByte:
@@ -86,6 +87,10 @@ namespace ABSoftware.ABSave
             
         }
 
+        #endregion
+
+        #region Helpers
+
         /// <summary>
         /// Whether the specified primitive type requires a lower innerLevel symbol at the end.
         /// </summary>
@@ -97,15 +102,33 @@ namespace ABSoftware.ABSave
         }
 
         /// <summary>
+        /// Works out the number of decimal places that need to be written in a version.
+        /// </summary>
+        public static int WorkOutNumberOfDecimalsInVersion(Version ver)
+        {
+            if (ver.MinorRevision != 0)
+                return 4;
+            else if (ver.Minor != 0)
+                return 3;
+            else if (ver.MajorRevision != 0)
+                return 2;
+            else if (ver.Major != 0)
+                return 1;
+            return 0;
+        }
+
+        #endregion
+
+        #region Type Creation
+
+        /// <summary>
         /// Attempts to create an instance of an object, based on a NameValueTypeDictionary - if the object's constructors have parameters, we'll attempt to figure out how to use them.
         /// </summary>
         /// <typeparam name="T">The type of the object.</typeparam>
-        /// <param name="errorHandler">The way of handling any errors.</param>
+        /// <param name="settings">The way of handling any errors.</param>
         /// <param name="location">OPTIONAL: The location this happened in an ABSave string - used in any errors.</param>
-        public static object CreateInstance(Type type, ABSaveErrorHandler errorHandler, ABSaveObjectItems values, int location = 0)
+        public static object CreateInstance(Type type, ABSaveSettings settings, ABSaveObjectItems values, int location = 0)
         {
-            errorHandler = ABSaveErrorHandler.EnsureNotNull(errorHandler);
-
             // =======================
             // Variables
             // =======================
@@ -249,14 +272,14 @@ namespace ABSoftware.ABSave
 
             // If we made it here, it means there weren't any PERFECT ones, so, before we attempt anything, we'll want to throw an error if we have come across more than one "No Case Match" constructor (in which case we wouldn't know what to use).
             if (multipleNoCaseMatchConstructors)
-                errorHandler.TooManyConstructorsWithDifferentCase(type, location);
+                settings.ErrorHandler.TooManyConstructorsWithDifferentCase(type, location);
 
             // And, now see if there was a "No Case Match" one, if so, that's the constructor we need!
             if (noCaseMatchValues.Count() > 0)
                 return InsertValuesIntoObject(Activator.CreateInstance(type, noCaseMatchValues), noCaseMatchRemaining);
 
             // And, if we got all the way here - it failed completely.
-            errorHandler.InvalidConstructorsForCreatingObject(type, location);
+            settings.ErrorHandler.InvalidConstructorsForCreatingObject(type, location);
             return null;
         }
 
@@ -310,7 +333,7 @@ namespace ABSoftware.ABSave
             var ret = new ABSaveObjectItems();
 
             // First of all, get all of the fields.
-            var fields = objType.GetFields();
+            var fields = objType.GetFields(BindingFlags.Public | BindingFlags.Instance);
 
             // Add all of the fields to the ObjectItems dictionary.
             for (int i = 0; i < fields.Count(); i++)
@@ -320,85 +343,211 @@ namespace ABSoftware.ABSave
             return ret;
         }
 
-        /// <summary>
-        /// Turns two characters like "3" and "7" into a byte - like "0011|0111"
-        /// </summary>
-        /// <param name="first">The first character to transform - at the start of the byte.</param>
-        /// <param name="second">The second character to transform - at the end of the byte.</param>
-        /// <returns>Returns the transformed byte.</returns>
-        public static byte ConvertNumericalCharsToByte(char first, char second)
-        {
-            byte ret;
-            switch (first)
-            {
-                // NOTE: EVERYTHING IS SHIFTED OVER ONE TO ALLOW THE CHARACTER \u0001 TO END THE DATETIME
-                case '1':
-                    ret = 32; // 00100000
-                    break;
-                case '2':
-                    ret = 48; // 00110000
-                    break;
-                case '3':
-                    ret = 64; // 01000000
-                    break;
-                case '4':
-                    ret = 80; // 01010000
-                    break;
-                case '5':
-                    ret = 96; // 01100000
-                    break;
-                case '6':
-                    ret = 112; // 01110000
-                    break;
-                case '7':
-                    ret = 128; // 10000000
-                    break;
-                case '8':
-                    ret = 144; // 10010000
-                    break;
-                case '9':
-                    ret = 160; // 10100000
-                    break;
-                default:
-                    ret = 0;
-                    break;
-            }
+        #endregion
 
-            switch (second)
+        #region Numerical
+        /// <summary>
+        /// Converts a number to a byte array.
+        /// </summary>
+        /// <param name="num">The number to convert.</param>
+        /// <returns></returns>
+        public static byte[] ConvertNumberToByteArray(dynamic num, TypeCode tCode)
+        {
+            switch (tCode)
             {
-                // (Remember that they are all shifted over to the left by 1)
-                case '1':
-                    ret += 2; // XXXX0010
-                    break;
-                case '2':
-                    ret += 3; // XXXX0011
-                    break;
-                case '3':
-                    ret += 4; // XXXX0100
-                    break;
-                case '4':
-                    ret += 5; // XXXX0101
-                    break;
-                case '5':
-                    ret += 6; // XXXX0110
-                    break;
-                case '6':
-                    ret += 7; // XXXX0111
-                    break;
-                case '7':
-                    ret += 8; // XXXX1000
-                    break;
-                case '8':
-                    ret += 9; // XXXX1001
-                    break;
-                case '9':
-                    ret += 10; // XXXX1010
-                    break;
+                case TypeCode.Byte:
+
+                    // Just return the byte.
+                    return new byte[] { num };
+
+                case TypeCode.SByte:
+
+                    // Just return the sbyte - we can cast it to a byte without losing info.
+                    return new byte[] { (byte)num };
+
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.Double:
+                case TypeCode.Single:
+
+                    // Convert it to a byte array.
+                    return NumberToLittleEndianBytes(num);
+
+                case TypeCode.Decimal:
+
+                    return ConvertDecimalToByteArray(num);
+
                 default:
-                    // do the default action
-                    break;
+
+                    return null;
             }
-            return ret;
         }
+
+        private static byte[] ConvertDecimalToByteArray(dynamic num)
+        {
+            // Converting a decimal to a byte array is hard, first of all, it takes up 16 bytes.
+            var arr = new byte[16];
+
+            // And, it's made up of four smaller 32-bit integers.
+            var bits = decimal.GetBits(num);
+
+            // We'll do the first two - the "low" and "mid", adding them to the array.
+            NumberToLittleEndianBytes(bits[0]).CopyTo(arr, 0);
+            NumberToLittleEndianBytes(bits[1]).CopyTo(arr, 4);
+
+            // We'll also do the "high" and "flags" parts.
+            NumberToLittleEndianBytes(bits[2]).CopyTo(arr, 8);
+            NumberToLittleEndianBytes(bits[3]).CopyTo(arr, 12);
+
+            // Now, we have our byte array in "arr", and we can simply return it.
+            return arr;
+        }
+
+        /// <summary>
+        /// Convert a byte array to a number.
+        /// </summary>
+        /// <param name="arr">The byte array.</param>
+        /// <returns>The final object</returns>
+        public static object ConvertByteArrayToNumber(byte[] arr, TypeCode tCode, Type actualType)
+        {
+            // If there's nothing in the array, just return nothing.
+            if (arr.Length == 0)
+                return Convert.ChangeType(0, actualType);
+
+            // If we're working on big-endian, we need to reverse it to become little endian.
+            if (BitConverter.IsLittleEndian)
+                arr = arr.Reverse().ToArray();
+
+            switch (tCode)
+            {
+                case TypeCode.Byte:
+
+                    // Just return the byte.
+                    return arr[0];
+
+                case TypeCode.SByte:
+
+                    // Just return the sbyte - we can cast it from a byte without losing info.
+                    return (sbyte)arr[0];
+
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.Double:
+                case TypeCode.Single:
+
+                    // Convert it from a byte array.
+                    return Convert.ChangeType(BitConverter.ToDouble(arr, 0), actualType);
+
+                case TypeCode.Decimal:
+
+                    return ConvertByteArrayToDecimal(arr);
+
+                default:
+                    return null;
+            }
+        }
+
+        private static object ConvertByteArrayToDecimal(byte[] arr)
+        {
+            // Converting a byte array to a decimal is also really hard, we'll start with storing all the bits.
+            var bits = new int[4];
+
+            // Now, we'll convert the "low" and "mid" first - setting an offset.
+            bits[0] = BitConverter.ToInt32(arr, 0);
+            bits[1] = BitConverter.ToInt32(arr, 4);
+
+            // We'll also convert the "high" and "flags".
+            bits[2] = BitConverter.ToInt32(arr, 8);
+            bits[3] = BitConverter.ToInt32(arr, 12);
+
+            // Now, we can return the decimal.
+            return new decimal(bits);
+        }
+
+        /// <summary>
+        /// Gets the number of bytes required to store a number.
+        /// </summary>
+        /// <param name="tCode">The type for the number.</param>
+        /// <returns>The length</returns>
+        public static byte GetBytesForNumber(TypeCode tCode)
+        {
+            switch (tCode)
+            {
+                case TypeCode.Byte:
+                case TypeCode.SByte:
+
+                    // This is one byte long, obviously.
+                    return 1;
+
+                case TypeCode.UInt16:
+                case TypeCode.Int16:
+
+                    // This is 2 bytes long.
+                    return 2;
+
+                case TypeCode.UInt32:
+                case TypeCode.Int32:
+                case TypeCode.Single:
+
+                    // This is 4 bytes long
+                    return 4;
+
+                case TypeCode.UInt64:
+                case TypeCode.Int64:
+                case TypeCode.Double:
+
+                    // This is 8 bytes long.
+                    return 8;
+
+                case TypeCode.Decimal:
+
+                    // This is 16 bytes long.
+                    return 16;
+
+                default:
+                    return 0;
+            }
+        }
+
+        /// <summary>
+        /// Converts a number to a byte array in the form of a little endian (we use little endian since on most machines it will save performance by not having to constantly reverse it)
+        /// </summary>
+        /// <param name="num">The number to convert.</param>
+        /// <returns></returns>
+        public static byte[] NumberToLittleEndianBytes(dynamic num)
+        {
+            // If we're working on big-endian, we need to reverse it to become little endian.
+            if (BitConverter.IsLittleEndian)
+                return BitConverter.GetBytes(num);
+            else
+                return BitConverter.GetBytes(num).Reverse().ToArray();
+        }
+
+        /// <summary>
+        /// Converts a number to a byte array in the form of a little endian (we use little endian since on most machines it will save performance by not having to constantly reverse it)
+        /// </summary>
+        /// <param name="num">The number to convert.</param>
+        /// <returns></returns>
+        public static object LittleEndianBytesToNumber(byte[] bytes, bool asDouble, int startIndex = 0)
+        {
+            // If we're working on big-endian, we need to reverse it to become little endian.
+            if (BitConverter.IsLittleEndian)
+                return asDouble ? BitConverter.ToDouble(bytes, startIndex) : BitConverter.ToInt32(bytes, startIndex);
+            else
+            {
+                // Reverse the bytes and then return use that.
+                var reversed = bytes.Reverse() as byte[];
+                return asDouble ? BitConverter.ToDouble(reversed, startIndex) : BitConverter.ToInt32(reversed, startIndex);
+            }
+        }
+        #endregion
     }
 }

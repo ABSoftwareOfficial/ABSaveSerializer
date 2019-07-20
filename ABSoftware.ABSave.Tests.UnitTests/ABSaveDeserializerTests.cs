@@ -12,7 +12,7 @@ namespace ABSoftware.ABSave.Tests.UnitTests
         public void Deserialize_StringObject_ReturnsCertainObject()
         {
             // Act
-            var result = ABSaveDeserializer.Deserialize("abcdefg", typeof(string));
+            var result = ABSaveDeserializer.Deserialize("abcdefg", typeof(string), new ABSaveSettings());
 
             // Assert
             Assert.AreEqual("abcdefg", result);
@@ -22,7 +22,7 @@ namespace ABSoftware.ABSave.Tests.UnitTests
         public void Deserialize_LongObject_ReturnsCertainObject()
         {
             // Act
-            var result = ABSaveDeserializer.Deserialize("36263", typeof(long));
+            var result = ABSaveDeserializer.Deserialize("36263", typeof(long), new ABSaveSettings());
 
             // Assert
             Assert.AreEqual((long)36263, result);
@@ -32,7 +32,7 @@ namespace ABSoftware.ABSave.Tests.UnitTests
         public void Deserialize_ArrayObject_ReturnsCertainObject()
         {
             // Act
-            var result = ABSaveDeserializer.Deserialize("\u0004First,Second", typeof(string[]), out ABSavePrimitiveType typ, out bool manuallyParse);
+            var result = ABSaveDeserializer.Deserialize("\u0004First,Second", typeof(string[]), new ABSaveSettings(), out ABSavePrimitiveType typ, out bool manuallyParse);
 
             // Assert
             Assert.AreEqual(ABSavePrimitiveType.Array, typ);
@@ -44,7 +44,7 @@ namespace ABSoftware.ABSave.Tests.UnitTests
         public void Deserialize_DictionaryObject_ReturnsCertainObject()
         {
             // Act
-            var result = ABSaveDeserializer.Deserialize("\u0006FirstItem,FirstValue,SecondItem,SecondValue", typeof(Dictionary<string, string>), out ABSavePrimitiveType typ, out bool manuallyParse);
+            var result = ABSaveDeserializer.Deserialize("\u0006FirstItem,FirstValue,SecondItem,SecondValue", typeof(Dictionary<string, string>), new ABSaveSettings(), out ABSavePrimitiveType typ, out bool manuallyParse);
 
             // Assert
             Assert.AreEqual(ABSavePrimitiveType.Dictionary, typ);
@@ -56,7 +56,7 @@ namespace ABSoftware.ABSave.Tests.UnitTests
         public void Deserialize_DateTimeObject_ReturnsCertainObject()
         {
             // Act
-            var result = ABSaveDeserializer.Deserialize("3616316", typeof(DateTime));
+            var result = ABSaveDeserializer.Deserialize("3616316", typeof(DateTime), new ABSaveSettings());
 
             // Assert
             Assert.AreEqual(new DateTime(3616316), result);
@@ -66,7 +66,7 @@ namespace ABSoftware.ABSave.Tests.UnitTests
         public void Deserialize_FalseBoolObject_ReturnsCertainObject()
         {
             // Act
-            var result = ABSaveDeserializer.Deserialize("F", typeof(bool));
+            var result = ABSaveDeserializer.Deserialize("F", typeof(bool), new ABSaveSettings());
 
             // Assert
             Assert.AreEqual(false, result);
@@ -76,7 +76,7 @@ namespace ABSoftware.ABSave.Tests.UnitTests
         public void Deserialize_TrueBoolObject_ReturnsCertainObject()
         {
             // Act
-            var result = ABSaveDeserializer.Deserialize("T", typeof(bool));
+            var result = ABSaveDeserializer.Deserialize("T", typeof(bool), new ABSaveSettings());
 
             // Assert
             Assert.AreEqual(true, result);
@@ -86,7 +86,7 @@ namespace ABSoftware.ABSave.Tests.UnitTests
         public void DeserializeBool_FalseObject_ReturnsCertainObject()
         {
             // Act
-            var result = ABSaveDeserializer.DeserializeBool("F");
+            var result = ABSaveDeserializer.DeserializeBool("F", new ABSaveSettings());
 
             // Assert
             Assert.AreEqual(false, result);
@@ -96,7 +96,7 @@ namespace ABSoftware.ABSave.Tests.UnitTests
         public void DeserializeBool_TrueObject_ReturnsCertainObject()
         {
             // Act
-            var result = ABSaveDeserializer.DeserializeBool("T");
+            var result = ABSaveDeserializer.DeserializeBool("T", new ABSaveSettings());
 
             // Assert
             Assert.AreEqual(true, result);
@@ -106,7 +106,7 @@ namespace ABSoftware.ABSave.Tests.UnitTests
         public void DeserializeNumber_IntObject_ReturnsCertainObject()
         {
             // Act
-            var result = ABSaveDeserializer.DeserializeNumber<int>("15136");
+            var result = ABSaveDeserializer.DeserializeNumber<int>("15136", new ABSaveSettings());
 
             // Assert
             Assert.AreEqual(15136, result);
@@ -116,7 +116,7 @@ namespace ABSoftware.ABSave.Tests.UnitTests
         public void DeserializeDateTime_DateTimeObject_ReturnsCertainObject()
         {
             // Act
-            var result = ABSaveDeserializer.DeserializeDateTime("15136");
+            var result = ABSaveDeserializer.DeserializeDateTime("15136", new ABSaveSettings());
 
             // Assert
             Assert.AreEqual(new DateTime(15136), result);

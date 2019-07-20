@@ -1,0 +1,97 @@
+Executing: C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe
+Microsoft (R) Test Execution Command Line Tool Version 16.1.0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+  V Deserialize_StringObject_ReturnsCertainObject [324ms]
+  V Deserialize_LongObject_ReturnsCertainObject [2ms]
+  V Deserialize_ArrayObject_ReturnsCertainObject [1ms]
+  V Deserialize_DictionaryObject_ReturnsCertainObject [< 1ms]
+  V Deserialize_DateTimeObject_ReturnsCertainObject [1ms]
+  V Deserialize_FalseBoolObject_ReturnsCertainObject [< 1ms]
+  V Deserialize_TrueBoolObject_ReturnsCertainObject [< 1ms]
+  V DeserializeBool_FalseObject_ReturnsCertainObject [< 1ms]
+  V DeserializeBool_TrueObject_ReturnsCertainObject [< 1ms]
+  V DeserializeNumber_IntObject_ReturnsCertainObject [1ms]
+  V DeserializeDateTime_DateTimeObject_ReturnsCertainObject [< 1ms]
+  V WriteType_NoVersion_PublicKey [372ms]
+  V WriteType_Version_NoPublicKey [9ms]
+  V WriteType_Version_PublicKey [7ms]
+  V Escape_NoNeedToEscapeString [1ms]
+  V Escape_OneReasonToEscapeString [2ms]
+  V Escape_ReasonsToEscapeString [2ms]
+  V WriteNextItem_ShouldNotWriteNextItem [< 1ms]
+  V WriteNextItem_ShouldWriteNextItem [< 1ms]
+  V WriteString_ShouldNotWriteNextItem [< 1ms]
+  V WriteString_ShouldWriteNextItem [< 1ms]
+  V WriteNumerical_Int16ToSB [5ms]
+  V WriteNumerical_Int16 [< 1ms]
+  V WriteNumerical_Int32 [< 1ms]
+  V WriteNumerical_Int64 [1ms]
+  V WriteNumerical_Float [5ms]
+  V WriteNumerical_Double [1ms]
+  V WriteNumerical_Decimal [24ms]
+  V WriteNumerical_DecimalToSB [< 1ms]
+  V WriteObjectOpen [9ms]
+  V WriteObjectClose [< 1ms]
+  V WriteArrayOpening [< 1ms]
+  V WriteDictionaryOpening [< 1ms]
+  V Serialize_DateTimeObject_ReturnsString [115ms]
+  V Serialize_BooleanObject_ReturnsString [9ms]
+  V Serialize_StringObject_ReturnsString [4ms]
+  V Serialize_IntegerObject_ReturnsString [5ms]
+  V Serialize_LongObject_ReturnsString [3ms]
+  V Serialize_DoubleObject_ReturnsString [4ms]
+  V SerializeBool_TrueValue_ReturnsString [1ms]
+  V SerializeBool_FalseValue_ReturnsString [< 1ms]
+  X SerializeObject_SaveObject_ReturnsString [137ms]
+  Error Message:
+   Assert.AreEqual failed. Expected:<\0\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.TestClass,ABSoftware.ABSave.Tests.UnitTests,\0\0\0,Oh, Hello!m\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.NextClass,ABSoftware.ABSave.Tests.UnitTests,\0\0\0,FFirstStrSecondStr>. Actual:<\0\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.TestClass,ABSoftware.ABSave.Tests.UnitTestsOh, Hello!m\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.NextClass,ABSoftware.ABSave.Tests.UnitTestsFFirstStrSecondStr>. 
+  Stack Trace:
+     at ABSoftware.ABSave.Tests.UnitTests.ABSaveSerializerTests.SerializeObject_SaveObject_ReturnsString() in G:\Prog-Projects\ABWorld\ABSoftware\Libraries\ABSoftware.ABSave\ABSoftware.ABSave.Tests.UnitTests\ABSaveSerializerTests.cs:line 128
+
+  V SerializeArray_SingleItemArray_ReturnsString [2ms]
+  V SerializeDictionary_StringStringDictionary_ReturnsString [20ms]
+  V SerializeDateTime_DateTimeObject_ReturnsString [< 1ms]
+  X SerializeABSave_SaveObject_ReturnsString [10ms]
+  Error Message:
+   Assert.AreEqual failed. Expected:<UOh, Hello!mABSoftware.ABSave.Tests.UnitTests.TestObjects.NextClass,ABSoftware.ABSave.Tests.UnitTests,Version=1.0.0.0,Culture=neutral,PublicKeyToken=null\0\0FFirstStrSecondStr>. Actual:<UOh, Hello!m\0\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.NextClass,ABSoftware.ABSave.Tests.UnitTestsFFirstStrSecondStr>. 
+  Stack Trace:
+     at ABSoftware.ABSave.Tests.UnitTests.ABSaveConvertTests.SerializeABSave_SaveObject_ReturnsString() in G:\Prog-Projects\ABWorld\ABSoftware\Libraries\ABSoftware.ABSave\ABSoftware.ABSave.Tests.UnitTests\ABSaveConvertTests.cs:line 24
+
+  X SerializeABSave_ComplexObject_ReturnsString [140ms]
+  Error Message:
+   Assert.AreEqual failed. Expected:<U\0\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.Solar_System,ABSoftware.ABSave.Tests.UnitTests,\0\0\0,Milky Way\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.Planet,ABSoftware.ABSave.Tests.UnitTests,\0\0\0,Mercury\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.Animal,ABSoftware.ABSave.Tests.UnitTests,\0\0\0,FirefoxCan survive ultra-high temperatures. Loves digging holes.\0AShiftShifts in and out of existence.ÿ?\0UnknownUnknown\0\0Unknown #2Unknown #2\0\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.Building,ABSoftware.ABSave.Tests.UnitTests,\0\0\0,Big HoleSomewhere\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.Company,ABSoftware.ABSave.Tests.UnitTests,\0\0\0,Unknown\0\0\0\0\0\0\0\0?Ç@\0@,îî~ABSoftware.ABSave.Tests.UnitTests.TestObjects.WorkSite\0Biggest ever holeSomewhere Else\0Unknown\0\0\0\0\0?ž?A\0@Xéyu¶\0Earth\0HumanSome mysterious creature that only humans (and maybe dolphins ;) ) know about.øú?\0CatCat Videos.d\0The Shard32 London Bridge Street, London SE1 9SG\0Stella Property\0¾âŠÿ?\0\00qJaÔffff&?Ç@\0@UA­R¾\0Unnamed25 London Bridge Street, London XYZ XYZ\0Elegantly SmallðF?>I\0?éÇo?·Ò­[@\0@#ŒáY’\0Simply Square176 XYZ Street, London XYZ ZYX\0SimplBuild?\0·?¯#dâH z©n@\0·J
+ÔABSoftware.ABSave.Tests.UnitTests.TestObjects.WorkSite\0BrickShard2521463 London Bridge Street, London XXZ XXZ\0Stella Property, Bigger, Better+ŒdxEcÿ?\0·0ùâ?à33333½@\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.WorkSite\0SimplLarge HQ54321 London Bridge Street, London ZYY XXZ\0Stella Property, Bigger, Better+\0dõüô…ÿ?\0·0ùâ?à33333½@\0>. Actual:<U\0\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.Solar_System,ABSoftware.ABSave.Tests.UnitTestsMilky Way\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.Planet,ABSoftware.ABSave.Tests.UnitTestsMercury\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.Animal,ABSoftware.ABSave.Tests.UnitTestsFirefoxCan survive ultra-high temperatures. Loves digging holes.\0AShiftShifts in and out of existence.ÿ?\0UnknownUnknown\0\0Unknown #2Unknown #2\0\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.Building,ABSoftware.ABSave.Tests.UnitTestsBig HoleSomewhere\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.Company,ABSoftware.ABSave.Tests.UnitTestsUnknown\0\0\0\0\0\0\0\0?Ç@\0@,îî~ABSoftware.ABSave.Tests.UnitTests.TestObjects.WorkSite\0Biggest ever holeSomewhere Else\0Unknown\0\0\0\0\0?ž?A\0@Xéyu¶\0Earth\0HumanSome mysterious creature that only humans (and maybe dolphins ;) ) know about.øú?\0CatCat Videos.d\0The Shard32 London Bridge Street, London SE1 9SG\0Stella Property\0¾âŠÿ?\0\00qJaÔffff&?Ç@\0@UA­R¾\0Unnamed25 London Bridge Street, London XYZ XYZ\0Elegantly SmallðF?>I\0?éÇo?·Ò­[@\0@#ŒáY’\0Simply Square176 XYZ Street, London XYZ ZYX\0SimplBuild?\0·?¯#dâH z©n@\0·J
+ÔABSoftware.ABSave.Tests.UnitTests.TestObjects.WorkSite\0BrickShard2521463 London Bridge Street, London XXZ XXZ\0Stella Property, Bigger, Better+ŒdxEcÿ?\0·0ùâ?à33333½@\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.WorkSite\0SimplLarge HQ54321 London Bridge Street, London ZYY XXZ\0Stella Property, Bigger, Better+\0dõüô…ÿ?\0·0ùâ?à33333½@\0>. 
+  Stack Trace:
+     at ABSoftware.ABSave.Tests.UnitTests.ABSaveConvertTests.SerializeABSave_ComplexObject_ReturnsString() in G:\Prog-Projects\ABWorld\ABSoftware\Libraries\ABSoftware.ABSave\ABSoftware.ABSave.Tests.UnitTests\ABSaveConvertTests.cs:line 35
+
+  X SerializeABSave_NAMEDSaveObject_ReturnsString [8ms]
+  Error Message:
+   Assert.AreEqual failed. Expected:<NstrOh, Hello!imnextCl\0\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.TestObjects.NextClass,ABSoftware.ABSave.Tests.UnitTests,Version=1.0.0.0,Culture=neutral,PublicKeyToken=nullyoyFlstOfStrFirstStrSecondStr>. Actual:<NstrOh, Hello!imnextCl\0\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.NextClass,ABSoftware.ABSave.Tests.UnitTestsyoyFlstOfStrFirstStrSecondStr>. 
+  Stack Trace:
+     at ABSoftware.ABSave.Tests.UnitTests.ABSaveConvertTests.SerializeABSave_NAMEDSaveObject_ReturnsString() in G:\Prog-Projects\ABWorld\ABSoftware\Libraries\ABSoftware.ABSave\ABSoftware.ABSave.Tests.UnitTests\ABSaveConvertTests.cs:line 50
+
+  X SerializeABSave_WITHTYPESSaveObject_ReturnsString [17ms]
+  Error Message:
+   Assert.AreEqual failed. Expected:<NStrhmmmm, okInnerArr\0\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.TestObjects.MultiObjectInner,ABSoftware.ABSave.Tests.UnitTests,Version=1.0.0.0,Culture=neutral,PublicKeyToken=nullOK$\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.TestObjects.MultiObjectInner,ABSoftware.ABSave.Tests.UnitTests,Version=1.0.0.0,Culture=neutral,PublicKeyToken=nullOKInnerABSoftware.ABSave.Tests.UnitTests.TestObjects.TestObjects.MultiObjectInner,ABSoftware.ABSave.Tests.UnitTests,Version=1.0.0.0,Culture=neutral,PublicKeyToken=nullOK>. Actual:<NStrhmmmm, okInnerArr\0\0ABSoftware.ABSave.Tests.UnitTests.TestObjects.MultiObjectInner,ABSoftware.ABSave.Tests.UnitTestsOK$\0\0OKInner\0\0OK>. 
+  Stack Trace:
+     at ABSoftware.ABSave.Tests.UnitTests.ABSaveConvertTests.SerializeABSave_WITHTYPESSaveObject_ReturnsString() in G:\Prog-Projects\ABWorld\ABSoftware\Libraries\ABSoftware.ABSave\ABSoftware.ABSave.Tests.UnitTests\ABSaveConvertTests.cs:line 63
+
+  V SerializeABSave_NOTYPESSaveObject_ReturnsString [5ms]
+
+Total tests: 50
+     Passed: 45
+     Failed: 5
+ Total time: 1.9998 Seconds
+Committing...
+Source file is modified: G:\Prog-Projects\ABWorld\ABSoftware\Libraries\ABSoftware.ABSave\ABSoftware.ABSave\ABSaveUtils.cs
+Visited Classes 9 of 23 (39.13)
+Visited Methods 53 of 113 (46.9)
+Visited Points 506 of 1004 (50.40)
+Visited Branches 383 of 761 (50.33)
+
+==== Alternative Results (includes all methods including those without corresponding source) ====
+Alternative Visited Classes 9 of 23 (39.13)
+Alternative Visited Methods 53 of 118 (44.92)

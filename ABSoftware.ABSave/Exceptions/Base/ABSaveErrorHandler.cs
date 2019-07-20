@@ -50,7 +50,7 @@ namespace ABSoftware.ABSave.Exceptions.Base
         public bool IgnoreAllErrors = false;
 
         #region Event
-        
+
         public delegate void ErrorEncounteredEventHandler(ErrorEncounteredEventArgs e);
 
         /// <summary>
@@ -247,3 +247,4 @@ namespace ABSoftware.ABSave.Exceptions.Base
         }
     }
 }
+

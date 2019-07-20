@@ -62,6 +62,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ABSoftware.ABSave.Tests.PKeyAndVersionAssembly\ABSoftware.ABSave.Tests.PKeyAndVersionAssembly.csproj">
+      <Project>{633d866c-4332-42ac-9ca8-99dd812f7239}</Project>
+      <Name>ABSoftware.ABSave.Tests.PKeyAndVersionAssembly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ABSoftware.ABSave.Tests.VersionAssembly\ABSoftware.ABSave.Tests.VersionAssembly.csproj">
+      <Project>{1dcb9362-3375-4479-98d0-b000dd855c7e}</Project>
+      <Name>ABSoftware.ABSave.Tests.VersionAssembly</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ABSoftware.ABSave\ABSoftware.ABSave.csproj">
       <Project>{f957d31e-5af4-4d3a-bcb0-8d238153ad8a}</Project>
       <Name>ABSoftware.ABSave</Name>
